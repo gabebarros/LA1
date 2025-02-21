@@ -1,9 +1,12 @@
+package main.database;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import main.model.Album;
 
 public class MusicStore {
 	private ArrayList<Album> albumList;

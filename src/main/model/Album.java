@@ -3,11 +3,11 @@ import java.util.ArrayList;
 
 public class Album {
 	
-	private String title;
-	private String artist;
-	private String genre;
-	private int year;
-	private ArrayList<String> tracklist;
+	private final String title;
+	private final String artist;
+	private final String genre;
+	private final int year;
+	private final ArrayList<String> tracklist;
 	
 	public Album(String title, String artist, String genre, int year, ArrayList<String> tracklist) {
 		this.title = title;

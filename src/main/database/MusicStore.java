@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import main.model.Album;
+import main.model.Song;
 
 public class MusicStore {
 	private ArrayList<Album> albumList;
@@ -56,10 +57,10 @@ public class MusicStore {
 			    String genre = firstLine.split(",")[2];  
 			    int year = Integer.parseInt(firstLine.split(",")[3]); 
 			    
-			    ArrayList<String> tracklist = new ArrayList<String>();
+			    ArrayList<Song> tracklist = new ArrayList<Song>();
 				
 				while((line = reader.readLine()) != null) {
-				    tracklist.add(line);
+				    tracklist.add(new Song(line, artist, albumName));
 				}
 				
 				Album curAlbum = new Album(albumName, artist, genre, year, tracklist);
@@ -77,11 +78,20 @@ public class MusicStore {
         return albumList;
 	}
 	
-	public static void main(String[]args) {
-		ArrayList<Album> albumList = constructAlbumList();
-				
-		for (Album a : albumList) {
-			System.out.println(a.getTitle());
+	public ArrayList<Album> getAlbumList(){
+		ArrayList<Album> copyAlbumList = new ArrayList<Album>();
+		
+		for (Album a : this.albumList) {
+			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), a.getTracklist());
+			copyAlbumList.add(aCopy);
 		}
+		
+		return copyAlbumList;
+	}
+	
+	public MusicStore() {
+		ArrayList<Album> albumList = constructAlbumList();
+		
+		this.albumList = albumList;
 	}
 }

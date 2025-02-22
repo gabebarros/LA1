@@ -25,6 +25,10 @@ public class Song {
 		return album;
 	}
 	
+	public void rate(int value) { // Maybe private for this method?
+		this.rating = value;
+	}
+	
 	public int getRating() {
 		return this.rating;
 	}

@@ -10,7 +10,7 @@ import main.model.Album;
 import main.model.Song;
 
 public class MusicStore {
-	private ArrayList<Album> albumList;
+	protected ArrayList<Album> albumList;
 	
 	private static ArrayList<Album> constructAlbumList() {
 		File albums = new File("albums/albums.txt");  // hold albums.txt

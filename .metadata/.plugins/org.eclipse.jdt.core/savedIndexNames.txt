@@ -1,0 +1,2 @@
+INDEX VERSION 1.134+C:\Users\emmet\OneDrive\Desktop\CSC 335 Directory\LA1\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index

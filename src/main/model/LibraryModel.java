@@ -20,7 +20,7 @@ public class LibraryModel {
 	}
 
 	
-	public Album getAlbumByTitle(String title){
+	public Album getAlbumByTitle(String title, boolean print){
 		for (Album a : this.albums) {
 			if (a.getTitle().equals(title)) {
 				ArrayList<Song> copyTracklist = new ArrayList<Song>();
@@ -33,18 +33,26 @@ public class LibraryModel {
 				}
 				
 				Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
-				printAlbum(aCopy);
+				if (print) {
+					printAlbum(aCopy);
+				}
 				return aCopy;
 			}
+		}
+		
+		if (print) {
+			System.out.println("No albums with this title");
 		}
 		
 		return null;
 	}
 	
-	public Song getSongByTitle(String title){
+	public Song getSongByTitle(String title, boolean print){
 		for (Song s : this.songs) {
 			if (s.getTitle().equals(title)) {
-				printSong(s);		
+				if (print) {
+					printSong(s);
+				}		
 				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
 				if (s.isFavorite()) {
 					copySong.markFavorite();
@@ -53,10 +61,13 @@ public class LibraryModel {
 			}
 		}
 		
+		if (print) {
+			System.out.println("No songs with this title");
+		}
 		return null;
 	}
 	
-	public ArrayList<Album> getAlbumsByArtist(String artist){
+	public ArrayList<Album> getAlbumsByArtist(String artist, boolean print){
 		ArrayList<Album> searchedAlbums = new ArrayList<Album>();
 		for (Album a : this.albums) {
 			if (a.getArtist().equals(artist)) {
@@ -75,17 +86,23 @@ public class LibraryModel {
 		}
 		
 		if (searchedAlbums.size() == 0) {
+			if (print) {
+				System.out.println("No albums by this artist");
+			}
+			
 			return null;
 		}
 		
-		for (Album a : searchedAlbums) {
-			printAlbum(a);
+		if (print) {
+			for (Album a : searchedAlbums) {
+				printAlbum(a);
+			}
 		}
 		
 		return searchedAlbums;
 	}
 	
-	public ArrayList<Song> getSongsByArtist(String artist){
+	public ArrayList<Song> getSongsByArtist(String artist, boolean print){
 		ArrayList<Song> searchedSongs = new ArrayList<Song>();
 		
 		for (Song s : this.songs) {
@@ -100,17 +117,22 @@ public class LibraryModel {
 		}
 		
 		if (searchedSongs.size() == 0) {
+			if (print) {
+				System.out.println("No songs by this artist");
+			}
+			
 			return null;
 		}
 		
-		for (Song s : searchedSongs) {
-			printSong(s);
+		if (print) {
+			for (Song s : searchedSongs) {
+				printSong(s);
+			}
 		}
-		
+	
 		return searchedSongs;
 	}
 	
-	// TODO: handle duplicate adds
 	public void addSong(String songTitle) {
 		MusicStore ms = new MusicStore();
 		
@@ -120,24 +142,29 @@ public class LibraryModel {
 		if (songToAdd != null) {
 			// add song, artist, and album to library
 			
-			Song copySong = new Song(songToAdd.getTitle(), songToAdd.getArtist(), songToAdd.getAlbum(), songToAdd.getRating());
-			this.songs.add(copySong);
-			this.artists.add(songToAdd.getArtist());
-			
-			ArrayList<Song> copyTracklist = new ArrayList<Song>();
-			Album a = ms.getAlbumByTitle(songToAdd.getAlbum(), false);
-			for (Song s : a.getTracklist()) {
-				Song copySongAlbum = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
-				copyTracklist.add(copySongAlbum);
+			if (getSongByTitle(songTitle, false) == null) {
+				Song copySong = new Song(songToAdd.getTitle(), songToAdd.getArtist(), songToAdd.getAlbum(), songToAdd.getRating());
+				this.songs.add(copySong);
 			}
 			
-			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
-			albums.add(aCopy);
-		}
-		
+			if (!this.artists.contains(songToAdd.getArtist())) {
+				this.artists.add(songToAdd.getArtist());
+			}
+			
+			if (getAlbumByTitle(songToAdd.getAlbum(), false) == null) {
+				ArrayList<Song> copyTracklist = new ArrayList<Song>();
+				Album a = ms.getAlbumByTitle(songToAdd.getAlbum(), false);
+				for (Song s : a.getTracklist()) {
+					Song copySongAlbum = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+					copyTracklist.add(copySongAlbum);
+				}
+				
+				Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
+				albums.add(aCopy);
+			}	
+		}	
 	}
 	
-	// TODO: handle duplicate adds
 	public void addAlbum(String albumTitle) {
 		MusicStore ms = new MusicStore();
 		
@@ -149,13 +176,18 @@ public class LibraryModel {
 			for (Song s : a.getTracklist()) {
 				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
 				copyTracklist.add(copySong);
-				this.songs.add(copySong);
+				addSong(copySong.getTitle());
 			}
 			
 			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
 			
-			this.albums.add(aCopy);
-			this.artists.add(aCopy.getArtist());
+			if (getAlbumByTitle(aCopy.getTitle(), false) == null) {
+				this.albums.add(aCopy);
+			}	
+			
+			if (!this.artists.contains(aCopy.getArtist())) {
+				this.artists.add(aCopy.getArtist());
+			}
 			
 		}
 		
@@ -198,15 +230,22 @@ public class LibraryModel {
 		
 		
 		
-		lib.addAlbum("Tapestry");
-		lib.addAlbum("Tapestry");
+		lib.addAlbum("19");
+		lib.addSong("Tapestry");
+		lib.addSong("Tired");
 		
 		for (Song s : lib.songs) {
 			System.out.println(s.getTitle());
 		}
+		System.out.println();
 		
 		for (Album a : lib.albums) {
 			System.out.println(a.getTitle());
+		}
+		
+		System.out.println();
+		for (String s : lib.artists) {
+			System.out.println(s);
 		}
 		
 	}

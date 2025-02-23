@@ -12,6 +12,12 @@ import main.model.Song;
 public class MusicStore {
 	private ArrayList<Album> albumList;
 	
+	public MusicStore() {
+		ArrayList<Album> albumList = constructAlbumList();
+		
+		this.albumList = albumList;
+	}
+	
 	private static ArrayList<Album> constructAlbumList() {
 		File albums = new File("albums/albums.txt");  // hold albums.txt
 		BufferedReader reader = null;
@@ -197,11 +203,5 @@ public class MusicStore {
 			System.out.println(s.getTitle());
 		}
 		System.out.println();
-	}
-	
-	public MusicStore() {
-		ArrayList<Album> albumList = constructAlbumList();
-		
-		this.albumList = albumList;
 	}
 }

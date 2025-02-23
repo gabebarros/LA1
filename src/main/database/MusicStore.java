@@ -82,11 +82,45 @@ public class MusicStore {
 		ArrayList<Album> copyAlbumList = new ArrayList<Album>();
 		
 		for (Album a : this.albumList) {
-			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), a.getTracklist());
+			ArrayList<Song> copyTracklist = new ArrayList<Song>();
+			for (Song s : a.getTracklist()) {
+				copyTracklist.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
+			}
+			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
 			copyAlbumList.add(aCopy);
 		}
 		
 		return copyAlbumList;
+	}
+	
+	public Album getAlbum(String title){
+		for (Album a : this.albumList) {
+			if (a.getTitle().equals(title)) {
+				ArrayList<Song> copyTracklist = new ArrayList<Song>();
+				for (Song s : a.getTracklist()) {
+					copyTracklist.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
+				}
+				
+				Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
+				return aCopy;
+			}
+		}
+		
+		System.out.println("No album with this title");
+		return null;
+	}
+	
+	public Song getSong(String title){
+		for (Album a : this.albumList) {
+			for (Song s : a.getTracklist()) {
+				if (s.getTitle().equals(title)) {
+					return new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+				}
+			}
+		}
+		
+		System.out.println("No song with this title");
+		return null;
 	}
 	
 	public MusicStore() {

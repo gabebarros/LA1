@@ -13,6 +13,13 @@ public class Song {
 		this.album = album;
 	}
 	
+	public Song(String title, String artist, String album, int rating) {
+		this.title = title;
+		this.artist = artist;
+		this.album = album;
+		this.rating = rating;
+	}
+	
 	public String getTitle() {
 		return this.title;
 	}

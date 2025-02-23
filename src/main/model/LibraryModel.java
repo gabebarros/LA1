@@ -123,7 +123,7 @@ public class LibraryModel {
 		//	System.out.println(a.getTracklist().get(0).getAlbum());
 		//}
 
-		ms.getAlbumByTitle("Tapestry", true);
+		ms.getSongByTitle("Tapestry", true).getRating();
 		
 	}
 

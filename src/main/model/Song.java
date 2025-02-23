@@ -6,6 +6,7 @@ public class Song {
 	private String artist;
 	private String album;
 	private int rating;
+	private boolean favorite;
 	
 	public Song(String title, String artist, String album) {
 		this.title = title;
@@ -32,11 +33,29 @@ public class Song {
 		return album;
 	}
 	
-	public void rate(int value) { // Maybe private for this method?
-		this.rating = value;
-	}
-	
 	public int getRating() {
 		return this.rating;
 	}
+	
+	public boolean isFavorite() {
+		return this.favorite;
+	}
+	
+	public void markFavorite() {
+		this.favorite = true;
+	}
+	
+	public void rate(int value) { // Maybe private for this method?
+		if (value < 1 || value > 5) {
+			System.out.println("Ratings must be between 1 and 5");
+			return;
+		}
+		
+		this.rating = value;
+		
+		if (value == 5) {
+			this.favorite = true;
+		}
+	}
+	
 }

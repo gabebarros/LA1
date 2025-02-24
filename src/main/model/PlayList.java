@@ -52,28 +52,4 @@ public class PlayList {
 		}
 	}
 	
-	public static void main(String[] args) {
-		MusicStore ms = new MusicStore();
-		PlayList pl = new PlayList("pl");
-		
-		Song s = ms.getSongByTitle("Tapestry", false);
-		
-		pl.addSong(s);
-		pl.addSong(s);
-		pl.addSong(s);
-		
-		ArrayList<Song> songs = pl.getSongs();
-		
-		for (Song song : songs) {
-			System.out.println(song.getTitle());
-		}
-		
-		pl.removeSong(s);
-		ArrayList<Song> songs2 = pl.getSongs();
-		
-		for (Song song : songs2) {
-			System.out.println(song.getTitle());
-		}
-	}
-	
 }

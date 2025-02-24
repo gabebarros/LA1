@@ -120,15 +120,21 @@ public class MusicStore {
 	}
 	
 	public Song getSongByTitle(String title, boolean print){
+		Song retval = null;
 		for (Album a : this.albumList) {
 			for (Song s : a.getTracklist()) {
 				if (s.getTitle().equals(title)) {
 					if (print) {
 						printSong(s);
 					}
-					return new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+					
+					retval = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
 				}
 			}
+		}
+		
+		if (retval != null) {
+			return retval;
 		}
 		
 		System.out.println("No song with this title");

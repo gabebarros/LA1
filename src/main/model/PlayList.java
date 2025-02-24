@@ -1,0 +1,79 @@
+package main.model;
+
+import java.util.ArrayList;
+
+import main.database.MusicStore;
+
+public class PlayList {
+	
+	private String name;
+	private ArrayList<Song> songs;
+	
+	public PlayList(String name) {
+		this.name = name;
+		this.songs = new ArrayList<Song>();
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public ArrayList<Song> getSongs() {
+		ArrayList<Song> copy = new ArrayList<Song>();
+		
+		for (Song s : this.songs) {
+			Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum());
+			if (s.getRating() != 0) {
+				copySong.rate(s.getRating());
+			}
+			copy.add(copySong);
+		}
+		
+		return copy;
+	}
+	
+	public void addSong(Song s) {
+		Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum());
+		
+		if (s.getRating() != 0) {
+			copySong.rate(s.getRating());
+		}
+			
+		this.songs.add(copySong);
+	}
+	
+	// only removes 1 song if there are multiple copies
+	public void removeSong(Song s) {
+		for (Song cur : this.songs) {
+			if (cur.getTitle().equals(s.getTitle())) {
+				this.songs.remove(cur);
+				break;
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		MusicStore ms = new MusicStore();
+		PlayList pl = new PlayList("pl");
+		
+		Song s = ms.getSongByTitle("Tapestry", false);
+		
+		pl.addSong(s);
+		pl.addSong(s);
+		pl.addSong(s);
+		
+		ArrayList<Song> songs = pl.getSongs();
+		
+		for (Song song : songs) {
+			System.out.println(song.getTitle());
+		}
+		
+		pl.removeSong(s);
+		ArrayList<Song> songs2 = pl.getSongs();
+		
+		for (Song song : songs2) {
+			System.out.println(song.getTitle());
+		}
+	}
+	
+}

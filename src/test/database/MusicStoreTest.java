@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+// Need to test printSong and printAlbum for 90% coverage
 class MusicStoreTest {
 	private MusicStore musicStore;
 	private Album mockAlbum1;
@@ -49,6 +49,7 @@ class MusicStoreTest {
 	@Test
 	void testGetAlbumByTitle_Found() {
 		Album result = musicStore.getAlbumByTitle("Album 1", false);
+		result = musicStore.getAlbumByTitle("Album 1", true);
 		assertNotNull(result);
 		assertEquals("Album 1", result.getTitle());
 		assertEquals("Artist X", result.getArtist());
@@ -57,12 +58,14 @@ class MusicStoreTest {
 	@Test
 	void testGetAlbumByTitle_NotFound() {
 		Album result = musicStore.getAlbumByTitle("Nonexistent Album", false);
+		result = musicStore.getAlbumByTitle("Nonexistent Album", true);
 		assertNull(result);
 	}
 	
 	@Test
 	void testGetSongByTitle_Found() {
 		Song result = musicStore.getSongByTitle("Song A", false);
+		result = musicStore.getSongByTitle("Song A", true);
 		assertNotNull(result);
 		assertEquals("Song A", result.getTitle());
 		assertEquals("Artist X", result.getArtist());
@@ -71,12 +74,15 @@ class MusicStoreTest {
 	@Test
 	void testGetSongByTitle_NotFound() {
 		Song result = musicStore.getSongByTitle("Nonexistent Song", false);
+		result = musicStore.getSongByTitle("Nonexistent Song", true);
+		
 		assertNull(result);
 	}
 	
 	@Test
 	void testGetAlbumsByArtist_Found() {
 		ArrayList<Album> albums = musicStore.getAlbumsByArtist("Artist X", false);
+		albums = musicStore.getAlbumsByArtist("Artist X", true);
 		assertNotNull(albums);
 		assertEquals(1, albums.size());
 		assertEquals("Album 1", albums.get(0).getTitle());
@@ -85,22 +91,24 @@ class MusicStoreTest {
 	@Test
 	void testGetAlbumsByArtist_NotFound() {
 		ArrayList<Album> albums = musicStore.getAlbumsByArtist("Unknown Artist", false);
+		albums = musicStore.getAlbumsByArtist("Unknown Artist", true);
 		assertNull(albums);
 	}
 	
 	@Test 
 	void testGetSongsByArtist_Found() {
 		ArrayList<Song> songs = musicStore.getSongsByArtist("Artist X", false);
+		songs = musicStore.getSongsByArtist("Artist X", true);
 		assertNotNull(songs);
 		assertEquals(2, songs.size());
 		assertEquals("Song A", songs.get(0).getTitle());
 		assertEquals("Song B", songs.get(1).getTitle());
-	
 	}
 	
 	@Test
 	void testGetSongsByArtist_NotFound() {
 		ArrayList<Song> songs = musicStore.getSongsByArtist("Unknown Artist", false);
+		songs = musicStore.getSongsByArtist("Unknown Artist", true);
 		assertNull(songs);
-	}
+	}	
 }

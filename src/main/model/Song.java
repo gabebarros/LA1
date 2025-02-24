@@ -19,6 +19,9 @@ public class Song {
 		this.artist = artist;
 		this.album = album;
 		this.rating = rating;
+		if (rating == 5) {
+			this.favorite = true;
+		}
 	}
 	
 	public String getTitle() {
@@ -53,8 +56,11 @@ public class Song {
 		
 		this.rating = value;
 		
-		if (value == 5) {
+		if (this.rating == 5) {
 			this.favorite = true;
+		}
+		else {
+			this.favorite = false;
 		}
 	}
 	

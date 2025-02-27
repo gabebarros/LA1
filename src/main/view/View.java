@@ -74,12 +74,98 @@ public class View {
 			        	
 			        	ms.getAlbumByTitle(input, true);
 		        	}
+	        	}
 	        	else {
 	        		System.out.println("This is not an option");
 	        		System.out.println("");
 	        	}
 	        }
+	        
+	        if (input.equals("search library")) {
+	        	System.out.println("What do you want to search for?");
+	        	System.out.println("");
+	        	
+	        	input = scanner.nextLine().toLowerCase().strip();
+	        	
+	        	if (input.equals("song") || input.equals("songs")) {
+	        		System.out.println("By title or artist?");
+		        	System.out.println("");
+		        	input = scanner.nextLine().toLowerCase().strip();
+		        	
+		        	if (input.equals("artist")) {
+		        		System.out.println("Which artist?");
+			        	System.out.println("");
+			        	input = scanner.nextLine().strip();
+			        	
+			        	library.getSongsByArtist(input, true);
+		        	}
+		        	else if (input.equals("title")) {
+		        		System.out.println("Which song?");
+			        	System.out.println("");
+			        	input = scanner.nextLine().strip();
+			        	
+			        	System.out.println(input);
+			        	
+			        	library.getSongByTitle(input, true);
+		        	}
+		        	else {
+		        		System.out.println("This is not an option");
+		        		System.out.println("");
+		        	}
+	        	}
+	        	else if (input.equals("album") || input.equals("albums")) {
+	        		System.out.println("By title or artist?");
+		        	System.out.println("");
+		        	
+		        	input = scanner.nextLine().strip();
+		        	
+		        	if (input.equals("artist")) {
+		        		System.out.println("Which artist?");
+			        	System.out.println("");
+			        	input = scanner.nextLine().strip();
+			        	
+			        	library.getAlbumsByArtist(input, true);
+		        	}
+		        	else if (input.equals("title")) {
+		        		System.out.println("Which album?");
+			        	System.out.println("");
+			        	input = scanner.nextLine().strip();
+			        	
+			        	library.getAlbumByTitle(input, true);
+		        	}
+	        	}
+	        	else if (input.equals("playlist") || input.equals("playlists")) {
+	        		System.out.println("What is the title of the playlist?");
+		        	System.out.println("");
+		        	
+		        	input = scanner.nextLine().strip();
+		        	
+		        	library.printPlayListByName(input);
+	        	}
+	        	else {
+	        		System.out.println("This is not an option");
+	        		System.out.println("");
+	        	}
 	        }
+	        
+	        if (input.equals("add song")) {
+	        	System.out.println("Which song?");
+	        	System.out.println("");
+	        	
+	        	input = scanner.nextLine().strip();
+	        	
+	        	library.addSong(input);
+	        }
+	        
+	        if (input.equals("add album")) {
+	        	System.out.println("Which album?");
+	        	System.out.println("");
+	        	
+	        	input = scanner.nextLine().strip();
+	        	
+	        	library.addAlbum(input);
+	        }
+	        
 	     
 	     }
 	     

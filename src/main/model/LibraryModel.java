@@ -138,7 +138,7 @@ public class LibraryModel {
 	public void addSong(String songTitle) {
 		MusicStore ms = new MusicStore();
 		
-		Song songToAdd = ms.getSongByTitle(songTitle, false);		
+		Song songToAdd = ms.getSongByTitle(songTitle, false);	
 		
 		// check if song exists
 		if (songToAdd != null) {
@@ -268,7 +268,7 @@ public class LibraryModel {
 			if (p.getName().equals(name)) {
 				printed = true;
 				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
-				p.addSong(s);
+				p.addSong(copySong);
 			}
 		}
 		

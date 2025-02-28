@@ -1,3 +1,8 @@
+/*
+ * Class: MusicStoreTest.java
+ * 
+ * This class contains the unit tests for the MusicStore.java class.
+ */
 package test.database;
 
 import main.model.Album;

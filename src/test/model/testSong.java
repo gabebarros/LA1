@@ -1,3 +1,8 @@
+/*
+ * Class: testSong.java
+ * 
+ * This class contains the unit tests for the Song.java class.
+ */
 package test.model;
 
 import static org.junit.jupiter.api.Assertions.*;

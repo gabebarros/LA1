@@ -1,3 +1,13 @@
+/*
+ * Class: LibraryModel.java
+ * 
+ * This class represents the user's library in the application. Users can add
+ * songs/albums, create playlists, rate songs, search for songs/playlists, etc.
+ * This class interacts with the MusicStore class in order to get songs/albums.
+ * All getter methods return copies of the data, leading to a well-encapsulated
+ * class.
+ * 
+ */
 package main.model;
 
 import java.util.ArrayList;
@@ -6,24 +16,22 @@ import main.database.MusicStore;
 
 public class LibraryModel {
 	
-	private ArrayList<Song> songs;
-	private ArrayList<Album> albums;
+	protected ArrayList<Song> songs;
+	protected ArrayList<Album> albums;
 	private ArrayList<String> artists;
-	private ArrayList<Song> favorites;
 	private ArrayList<PlayList> playlists;
 	
 	public LibraryModel() {
 		this.songs = new ArrayList<Song>();
 		this.albums = new ArrayList<Album>();
 		this.artists = new ArrayList<String>();
-		this.favorites = new ArrayList<Song>();
 		this.playlists = new ArrayList<PlayList>();
 	}
-
 	
+	// returns album with title 'title' if it exists, else returns null
 	public Album getAlbumByTitle(String title){
 		for (Album a : this.albums) {
-			if (a.getTitle().equals(title)) {
+			if (a.getTitle().toLowerCase().equals(title.toLowerCase())) {
 				ArrayList<Song> copyTracklist = new ArrayList<Song>();
 				for (Song s : a.getTracklist()) {
 					Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
@@ -41,6 +49,7 @@ public class LibraryModel {
 		return null;
 	}
 	
+	// returns song with title 'title' if it exists, else returns null
 	public Song getSongByTitle(String title) {
 		for (Song s : this.songs) {
 			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {		
@@ -55,6 +64,7 @@ public class LibraryModel {
 		return null;
 	}
 	
+	// returns album list by artist if they exist else, returns null
 	public ArrayList<Album> getAlbumsByArtist(String artist){
 		ArrayList<Album> searchedAlbums = new ArrayList<Album>();
 		for (Album a : this.albums) {
@@ -80,6 +90,7 @@ public class LibraryModel {
 		return searchedAlbums;
 	}
 	
+	// returns song list by artist if they exist else, returns null
 	public ArrayList<Song> getSongsByArtist(String artist){
 		ArrayList<Song> searchedSongs = new ArrayList<Song>();
 		
@@ -101,6 +112,7 @@ public class LibraryModel {
 		return searchedSongs;
 	}
 	
+	// add song by song title
 	public void addSong(String songTitle) {
 		MusicStore ms = new MusicStore();
 		
@@ -133,6 +145,7 @@ public class LibraryModel {
 		}	
 	}
 	
+	// add album by album title. Also adds all the songs on the album
 	public void addAlbum(String albumTitle) {
 		MusicStore ms = new MusicStore();
 		

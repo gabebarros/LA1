@@ -1,3 +1,10 @@
+/*
+ * Class: Album.java
+ * 
+ * This class represents one album in the musicStore / libraryModel. The class
+ * contains attributes such as album title, genre, tracklist, and more. This is
+ * a simple class, only containing a constructor and getters
+ */
 package main.model;
 import java.util.ArrayList;
 

@@ -1,3 +1,8 @@
+/*
+ * Class: testAlbum.java
+ * 
+ * This class contains the unit tests for the Album.java class.
+ */
 package test.model;
 
 import static org.junit.Assert.assertEquals;

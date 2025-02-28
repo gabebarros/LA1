@@ -1,3 +1,12 @@
+/*
+ * Class: Song.java
+ * 
+ * This class represents one song in the musicStore / libraryModel. The class
+ * contains instance variables such as title, artists, rating, etc. There are
+ * two constructors, one also takes a rating. This is useful for making copies
+ * of song objects that have been rated. The class containes getters, and methods
+ * for rating and marking songs as favorite.
+ */
 package main.model;
 
 public class Song {
@@ -48,7 +57,7 @@ public class Song {
 		this.favorite = true;
 	}
 	
-	public void rate(int value) { // Maybe private for this method?
+	public void rate(int value) { 
 		this.rating = value;
 		
 		if (this.rating == 5) {

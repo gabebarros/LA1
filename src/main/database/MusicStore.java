@@ -1,3 +1,11 @@
+/*
+ * Class: MusicStore.java
+ * 
+ * This class parses the given txt files and creates all the corresponding
+ * album and song objects. Other classes can interact with this class by
+ * using the provided methods to get album by title/artist and get song by
+ * title/artist.
+ */
 package main.database;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +26,10 @@ public class MusicStore {
 		this.albumList = albumList;
 	}
 	
+	/*
+	 * This method parses the txt files in the albums.txt folder, creates Album
+	 * and Song objects based on these, and returns the entire list of albums.
+	 */
 	private static ArrayList<Album> constructAlbumList() {
 		File albums = new File("albums/albums.txt");  // hold albums.txt
 		BufferedReader reader = null;
@@ -84,6 +96,10 @@ public class MusicStore {
         return albumList;
 	}
 	
+	/*
+	 * This method returns the album with the given title, if it exists. If not,
+	 * it returns null.
+	 */
 	public Album getAlbumByTitle(String title){
 		for (Album a : this.albumList) {
 			if (a.getTitle().toLowerCase().equals(title.toLowerCase())) {
@@ -100,6 +116,10 @@ public class MusicStore {
 		return null;
 	}
 	
+	/*
+	 * This method returns the song(s) with the given title, if it exists. If not,
+	 * it returns an empty arraylist.
+	 */
 	public ArrayList<Song> getSongByTitle(String title){
 		ArrayList<Song> songList = new ArrayList<Song>();
 		for (Album a : this.albumList) {
@@ -113,6 +133,10 @@ public class MusicStore {
 		return songList;
 	}
 	
+	/*
+	 * This method returns the album(s) by the given artist, if any exist. If not,
+	 * it returns null.
+	 */
 	public ArrayList<Album> getAlbumsByArtist(String artist){
 		ArrayList<Album> searchedAlbums = new ArrayList<Album>();
 		for (Album a : this.albumList) {
@@ -134,6 +158,10 @@ public class MusicStore {
 		return searchedAlbums;
 	}
 	
+	/*
+	 * This method returns the songs(s) by the given artist, if any exist. If not,
+	 * it returns null.
+	 */
 	public ArrayList<Song> getSongsByArtist(String artist){
 		ArrayList<Song> searchedSongs = new ArrayList<Song>();
 		for (Album a : this.albumList) {

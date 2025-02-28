@@ -1,3 +1,11 @@
+/*
+ * Class: PlayList.java
+ * 
+ * This class represents one playlist in the musicStore / libraryModel. The class
+ * contains two attributes: name and tracklist. This class contains a constructor, 
+ * getters, and methods to add/remove songs to the playlist. If there are multiple
+ * occurrences of a song in a playlist, the remove method will remove only one.
+ */
 package main.model;
 
 import java.util.ArrayList;

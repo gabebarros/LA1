@@ -1,3 +1,8 @@
+/*
+ * Class: testPlayList.java
+ * 
+ * This class contains the unit tests for the PlayList.java class.
+ */
 package test.model;
 
 import static org.junit.Assert.assertEquals;

@@ -128,8 +128,6 @@ public class View {
 			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	System.out.println(input);
-			        	
 			        	printSongList(ms.getSongByTitle(input));
 		        	}
 		        	else {
@@ -150,7 +148,7 @@ public class View {
 			        	
 			        	printAlbumList(ms.getAlbumsByArtist(input));
 		        	}
-		        	else if (input.equals("title")) {//
+		        	else if (input.equals("title")) {
 		        		System.out.println("Which album?");
 			        	System.out.println();
 			        	input = scanner.nextLine().strip();

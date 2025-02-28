@@ -1,11 +1,83 @@
 package main.view;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import main.database.MusicStore;
+import main.model.Album;
 import main.model.LibraryModel;
+import main.model.PlayList;
+import main.model.Song;
 
 public class View {
+	
+	// print a song along with its other information
+	private static void printSong(Song s) {
+		if (s == null) {
+			System.out.println("No song with this title");
+			System.out.println();
+			return;
+		}
+		
+		System.out.println("Song title: " + s.getTitle());
+		System.out.println("Artist: " + s.getArtist());
+		System.out.println("Album: " + s.getAlbum());
+		System.out.println();
+	}
+	
+	// print an album along with its other information
+	private static void printAlbum(Album a) {
+		if (a == null) {
+			System.out.println("No album with this title");
+			System.out.println();
+			return;
+		}
+		
+		System.out.println("Album title: " + a.getTitle());
+		System.out.println("Artist: " + a.getArtist());
+		System.out.println("Genre: " + a.getGenre());
+		System.out.println("Year: " + a.getYear());
+		System.out.println("Tracklist:");
+		
+		for (Song s : a.getTracklist()) {
+			System.out.println(s.getTitle());
+		}
+		System.out.println();
+	}
+	
+	// print each album in a list of albums
+	private static void printAlbumList(ArrayList<Album> albums) {
+		if (albums == null || albums.size() == 0) {
+			System.out.println("No albums found");
+			System.out.println();
+			return;
+		}
+		for (Album a : albums) {
+			printAlbum(a);
+		}
+	}
+	
+	// print each song in a list of songs
+	private static void printSongList(ArrayList<Song> songs) {
+		if (songs == null || songs.size() == 0) {
+			System.out.println("No songs found");
+			System.out.println();
+			return;
+		}
+		for (Song s : songs) {
+			printSong(s);
+		}
+	}
+	
+	// AI
+	public static boolean isIntegerBetweenOneAndFive(String str) {
+	    try {
+	        int num = Integer.parseInt(str);
+	        return num >= 1 && num <= 5;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
 	
 	public static void main(String[] args) {
 		MusicStore ms = new MusicStore();
@@ -15,7 +87,7 @@ public class View {
 	     
 	     while (true) {
 	    	System.out.println("What would you like to do?");
-	    	System.out.println("");
+	    	System.out.println();
 	    	String input = scanner.nextLine().toLowerCase();  // store user input
 
 	        if (input.equals("quit")) {
@@ -24,148 +96,291 @@ public class View {
 	        
 	        if (input.equals("search music store")) {
 	        	System.out.println("Do you want to search for song(s) or album(s)?");
-	        	System.out.println("");
+	        	System.out.println();
 	        	
 	        	input = scanner.nextLine().toLowerCase().strip();
 	        	
 	        	if (input.equals("song") || input.equals("songs")) {
 	        		System.out.println("By title or artist?");
-		        	System.out.println("");
+		        	System.out.println();
 		        	input = scanner.nextLine().toLowerCase().strip();
 		        	
 		        	if (input.equals("artist")) {
 		        		System.out.println("Which artist?");
-			        	System.out.println("");
+			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	ms.getSongsByArtist(input, true);
+			        	printSongList(ms.getSongsByArtist(input));
 		        	}
 		        	else if (input.equals("title")) {
 		        		System.out.println("Which song?");
-			        	System.out.println("");
+			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
 			        	System.out.println(input);
 			        	
-			        	ms.getSongByTitle(input, true);
+			        	printSongList(ms.getSongByTitle(input));
 		        	}
 		        	else {
 		        		System.out.println("This is not an option");
-		        		System.out.println("");
+		        		System.out.println();
 		        	}
 	        	}
 	        	else if (input.equals("album") || input.equals("albums")) {
 	        		System.out.println("By title or artist?");
-		        	System.out.println("");
+		        	System.out.println();
 		        	
 		        	input = scanner.nextLine().strip();
 		        	
 		        	if (input.equals("artist")) {
 		        		System.out.println("Which artist?");
-			        	System.out.println("");
+			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	ms.getAlbumsByArtist(input, true);
+			        	printAlbumList(ms.getAlbumsByArtist(input));
 		        	}
-		        	else if (input.equals("title")) {
+		        	else if (input.equals("title")) {//
 		        		System.out.println("Which album?");
-			        	System.out.println("");
+			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	ms.getAlbumByTitle(input, true);
+			        	printAlbum(ms.getAlbumByTitle(input));
 		        	}
 	        	}
 	        	else {
 	        		System.out.println("This is not an option");
-	        		System.out.println("");
+	        		System.out.println();
 	        	}
 	        }
 	        
-	        if (input.equals("search library")) {
+	        else if (input.equals("search library")) {
 	        	System.out.println("What do you want to search for?");
-	        	System.out.println("");
+	        	System.out.println();
 	        	
 	        	input = scanner.nextLine().toLowerCase().strip();
 	        	
 	        	if (input.equals("song") || input.equals("songs")) {
 	        		System.out.println("By title or artist?");
-		        	System.out.println("");
+		        	System.out.println();
 		        	input = scanner.nextLine().toLowerCase().strip();
 		        	
 		        	if (input.equals("artist")) {
 		        		System.out.println("Which artist?");
-			        	System.out.println("");
+			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	library.getSongsByArtist(input, true);
+			        	printSongList(library.getSongsByArtist(input));
 		        	}
 		        	else if (input.equals("title")) {
 		        		System.out.println("Which song?");
-			        	System.out.println("");
+			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
 			        	System.out.println(input);
 			        	
-			        	library.getSongByTitle(input, true);
+			        	printSong(library.getSongByTitle(input));
 		        	}
 		        	else {
 		        		System.out.println("This is not an option");
-		        		System.out.println("");
+		        		System.out.println();
 		        	}
 	        	}
 	        	else if (input.equals("album") || input.equals("albums")) {
 	        		System.out.println("By title or artist?");
-		        	System.out.println("");
+		        	System.out.println();
 		        	
 		        	input = scanner.nextLine().strip();
 		        	
 		        	if (input.equals("artist")) {
 		        		System.out.println("Which artist?");
-			        	System.out.println("");
+			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	library.getAlbumsByArtist(input, true);
+			        	printAlbumList(library.getAlbumsByArtist(input));
 		        	}
 		        	else if (input.equals("title")) {
 		        		System.out.println("Which album?");
-			        	System.out.println("");
+			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	library.getAlbumByTitle(input, true);
+			        	printAlbum(library.getAlbumByTitle(input));
 		        	}
 	        	}
 	        	else if (input.equals("playlist") || input.equals("playlists")) {
 	        		System.out.println("What is the title of the playlist?");
-		        	System.out.println("");
+		        	System.out.println();
 		        	
 		        	input = scanner.nextLine().strip();
 		        	
-		        	library.printPlayListByName(input);
+		        	PlayList p = library.getPlayListByName(input);
+		        	
+		        	if (p == null) {
+		        		System.out.println("No playlist by this name");
+		        		System.out.println();
+		        	}
+		        	else {
+		        		ArrayList<Song> playlistSongs = p.getSongs();
+						
+						for (Song s : playlistSongs) {
+							System.out.println(s.getArtist() + ": " + s.getTitle());
+						}
+		        	}
 	        	}
 	        	else {
 	        		System.out.println("This is not an option");
-	        		System.out.println("");
+	        		System.out.println();
 	        	}
 	        }
 	        
-	        if (input.equals("add song")) {
+	        else if (input.equals("add song")) {
 	        	System.out.println("Which song?");
-	        	System.out.println("");
+	        	System.out.println();
 	        	
 	        	input = scanner.nextLine().strip();
 	        	
 	        	library.addSong(input);
 	        }
 	        
-	        if (input.equals("add album")) {
+	        else if (input.equals("add album")) {
 	        	System.out.println("Which album?");
-	        	System.out.println("");
+	        	System.out.println();
 	        	
 	        	input = scanner.nextLine().strip();
 	        	
 	        	library.addAlbum(input);
 	        }
 	        
+	        else if (input.equals("list my songs")) {
+	        	printSongList(library.getSongs());
+	        }
+	        
+	        else if (input.equals("list my artists")) {
+	        	ArrayList<String> artists = library.getArtists();
+	        	
+	        	if (artists.size() == 0) {
+	        		System.out.println("No Artists");
+	        		System.out.println();
+	        	}
+	        	else {
+	        		for (String a : artists) {
+	        			System.out.println(a);
+	        		}
+	        	}
+	        }
+	        
+	        else if (input.equals("list my albums")) {
+	        	printAlbumList(library.getAlbums());
+	        }
+	        
+	        else if (input.equals("list my playlists")) {
+	        	ArrayList<PlayList> playlists = library.getPlaylists();
+	        	
+	        	for (PlayList p : playlists) {
+	        		System.out.println(p.getName());
+	        	}
+	        	System.out.println();
+	        }
+	        
+	        else if (input.equals("list my favorite songs")) {
+	        	printSongList(library.getFavorites());
+	        }
+	        
+	        else if (input.equals("create playlist")) {
+	        	System.out.println("What do you want to name your playlist?");
+	        	System.out.println();
+	        	
+	        	input = scanner.nextLine().strip();
+	        		        	
+	        	if (library.makePlaylist(input) == null) {
+	        		System.out.println("Playlist with this name already exists");
+	        		System.out.println();
+	        	}
+	        }
+	        
+	        else if (input.equals("add song to playlist")) {
+	        	System.out.println("Which playlist?");
+	        	System.out.println();
+	        	
+	        	String playlist = scanner.nextLine().strip();
+	        	
+	        	System.out.println("Which song?");
+	        	System.out.println();
+	        	
+	        	String song = scanner.nextLine().strip();
+	        	
+	        	if (!library.addSongToPlayList(playlist, song)) {
+	        		System.out.println("Either song or playlist does not exist");
+	        		System.out.println();
+	        	}
+	        }
+	        
+	        else if (input.equals("remove song from playlist")) {
+	        	System.out.println("Which playlist?");
+	        	System.out.println();
+	        	
+	        	String playlist = scanner.nextLine().strip();
+	        	
+	        	System.out.println("Which song?");
+	        	System.out.println();
+	        	
+	        	String song = scanner.nextLine().strip();
+	        	
+	        	if (!library.removeSongFromPlayList(playlist, song)) {
+	        		System.out.println("Either song or playlist does not exist");
+	        		System.out.println();
+	        	}
+	        }
+	        
+	        else if (input.equals("mark song as favorite")) {
+	        	System.out.println("Which song?");
+	        	System.out.println();
+	        	
+	        	input = scanner.nextLine().strip();
+	        	
+	        	Song s = library.getSongByTitle(input);
+	        	
+	        	if (s == null) {
+	        		System.out.println("No song with this title");
+	        		System.out.println();
+	        	}
+	        	else {
+	        		library.markAsFavorite(s.getTitle());
+	        	}
+	        	
+	        }
+	        
+	        else if (input.equals("rate a song")) {
+	        	System.out.println("Which song?");
+	        	System.out.println();
+	        	
+	        	input = scanner.nextLine().strip();
+	        	
+	        	Song s = library.getSongByTitle(input);
+	        	
+	        	if (s == null) {
+	        		System.out.println("No song with this title");
+	        		System.out.println();
+	        	}
+	        	else {
+		        	System.out.println("What is the rating?");
+		        	System.out.println();
+		        	
+		        	input = scanner.nextLine().strip();
+		        	
+		        	if (isIntegerBetweenOneAndFive(input)) {
+		        		library.rateSong(s.getTitle(), Integer.parseInt(input));
+		        	}
+		        	else {
+		        		System.out.println("Rating must be an integer between 1 and 5");
+			        	System.out.println();
+		        	}
+	        	}
+	        	
+	        }
+	        else {
+	        	System.out.println("Invalid command, try again");
+        		System.out.println();
+	        }
 	     
 	     }
 	     

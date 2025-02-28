@@ -14,6 +14,11 @@ public class PlayList {
 		this.songs = new ArrayList<Song>();
 	}
 	
+	public PlayList(String name, ArrayList<Song> songs) {
+		this.name = name;
+		this.songs = songs;
+	}
+	
 	public String getName() {
 		return this.name;
 	}

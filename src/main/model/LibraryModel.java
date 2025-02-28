@@ -11,7 +11,6 @@ public class LibraryModel {
 	private ArrayList<String> artists;
 	private ArrayList<Song> favorites;
 	private ArrayList<PlayList> playlists;
-	// Need a PlayList class
 	
 	public LibraryModel() {
 		this.songs = new ArrayList<Song>();
@@ -22,7 +21,7 @@ public class LibraryModel {
 	}
 
 	
-	public Album getAlbumByTitle(String title, boolean print){
+	public Album getAlbumByTitle(String title){
 		for (Album a : this.albums) {
 			if (a.getTitle().equals(title)) {
 				ArrayList<Song> copyTracklist = new ArrayList<Song>();
@@ -35,26 +34,16 @@ public class LibraryModel {
 				}
 				
 				Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
-				if (print) {
-					printAlbum(aCopy);
-				}
 				return aCopy;
 			}
-		}
-		
-		if (print) {
-			System.out.println("No albums with this title");
 		}
 		
 		return null;
 	}
 	
-	public Song getSongByTitle(String title, boolean print){
+	public Song getSongByTitle(String title) {
 		for (Song s : this.songs) {
-			if (s.getTitle().equals(title)) {
-				if (print) {
-					printSong(s);
-				}		
+			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {		
 				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
 				if (s.isFavorite()) {
 					copySong.markFavorite();
@@ -63,16 +52,13 @@ public class LibraryModel {
 			}
 		}
 		
-		if (print) {
-			System.out.println("No songs with this title");
-		}
 		return null;
 	}
 	
-	public ArrayList<Album> getAlbumsByArtist(String artist, boolean print){
+	public ArrayList<Album> getAlbumsByArtist(String artist){
 		ArrayList<Album> searchedAlbums = new ArrayList<Album>();
 		for (Album a : this.albums) {
-			if (a.getArtist().equals(artist)) {
+			if (a.getArtist().toLowerCase().equals(artist.toLowerCase())) {
 				ArrayList<Song> copyTracklist = new ArrayList<Song>();
 				for (Song s : a.getTracklist()) {
 					Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
@@ -87,28 +73,18 @@ public class LibraryModel {
 			}
 		}
 		
-		if (searchedAlbums.size() == 0) {
-			if (print) {
-				System.out.println("No albums by this artist");
-			}
-			
+		if (searchedAlbums.size() == 0) {	
 			return null;
-		}
-		
-		if (print) {
-			for (Album a : searchedAlbums) {
-				printAlbum(a);
-			}
 		}
 		
 		return searchedAlbums;
 	}
 	
-	public ArrayList<Song> getSongsByArtist(String artist, boolean print){
+	public ArrayList<Song> getSongsByArtist(String artist){
 		ArrayList<Song> searchedSongs = new ArrayList<Song>();
 		
 		for (Song s : this.songs) {
-			if (s.getArtist().equals(artist)) {
+			if (s.getArtist().toLowerCase().equals(artist.toLowerCase())) {
 				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
 				if (s.isFavorite()) {
 					copySong.markFavorite();
@@ -119,17 +95,7 @@ public class LibraryModel {
 		}
 		
 		if (searchedSongs.size() == 0) {
-			if (print) {
-				System.out.println("No songs by this artist");
-			}
-			
 			return null;
-		}
-		
-		if (print) {
-			for (Song s : searchedSongs) {
-				printSong(s);
-			}
 		}
 	
 		return searchedSongs;
@@ -138,13 +104,13 @@ public class LibraryModel {
 	public void addSong(String songTitle) {
 		MusicStore ms = new MusicStore();
 		
-		Song songToAdd = ms.getSongByTitle(songTitle, false);	
+		Song songToAdd = ms.getSongByTitle(songTitle).get(0);	
 		
 		// check if song exists
 		if (songToAdd != null) {
 			// add song, artist, and album to library
 			
-			if (getSongByTitle(songTitle, false) == null) {
+			if (getSongByTitle(songTitle) == null) {
 				Song copySong = new Song(songToAdd.getTitle(), songToAdd.getArtist(), songToAdd.getAlbum(), songToAdd.getRating());
 				this.songs.add(copySong);
 			}
@@ -153,9 +119,9 @@ public class LibraryModel {
 				this.artists.add(songToAdd.getArtist());
 			}
 			
-			if (getAlbumByTitle(songToAdd.getAlbum(), false) == null) {
+			if (getAlbumByTitle(songToAdd.getAlbum()) == null) {
 				ArrayList<Song> copyTracklist = new ArrayList<Song>();
-				Album a = ms.getAlbumByTitle(songToAdd.getAlbum(), false);
+				Album a = ms.getAlbumByTitle(songToAdd.getAlbum());
 				for (Song s : a.getTracklist()) {
 					Song copySongAlbum = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
 					copyTracklist.add(copySongAlbum);
@@ -170,7 +136,7 @@ public class LibraryModel {
 	public void addAlbum(String albumTitle) {
 		MusicStore ms = new MusicStore();
 		
-		Album a = ms.getAlbumByTitle(albumTitle, false);
+		Album a = ms.getAlbumByTitle(albumTitle);
 		
 		// add song, artist, album to the library
 		if (a != null) {
@@ -183,7 +149,7 @@ public class LibraryModel {
 			
 			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
 			
-			if (getAlbumByTitle(aCopy.getTitle(), false) == null) {
+			if (getAlbumByTitle(aCopy.getTitle()) == null) {
 				this.albums.add(aCopy);
 			}	
 			
@@ -196,145 +162,170 @@ public class LibraryModel {
 	}
 	
 	// create a blank playlist
-	public void makePlaylist(String name) {
+	public PlayList makePlaylist(String name) {
 		for (PlayList p : this.playlists) {
-			if (p.getName().equals(name)) {
-				System.out.println("Playlist with this name already exists");
-				return;
+			if (p.getName().toLowerCase().equals(name.toLowerCase())) {
+				return null;
 			}
 		}
 		
 		PlayList newPlayList = new PlayList(name);
 		playlists.add(newPlayList);
+		
+		return newPlayList;
 	}
 	
-	// print all songs
-	public void getSongs() {
-		for (Song s : this.songs) {
-			System.out.println(s.getTitle());
+	// return all songs
+	public ArrayList<Song> getSongs() {
+		ArrayList<Song> copyList = new ArrayList<Song>();
+		for (Song s : this.songs) {	
+			Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+			if (s.isFavorite()) {
+				copySong.markFavorite();
+			}
+			copyList.add(copySong);
 		}
+		
+		return copyList;	
 	}
 	
-	// print all albums
-	public void getAlbums() {
+	// return all albums
+	public ArrayList<Album> getAlbums() {
+		ArrayList<Album> copyAlbums = new ArrayList<Album>();
 		for (Album a : this.albums) {
-			System.out.println(a.getTitle());
-		}
-	}
-	
-	// print all artists
-	public void getArtists() {
-		for (String a : this.artists) {
-			System.out.println(a);
-		}
-	}
-	
-	// print all favorite songs
-	public void getFavorites() {
-		for (Song s : this.favorites) {
-			System.out.println(s.getTitle());
-		}
-	}
-	
-	// print all playlists
-	public void getPlaylists() {
-		for (PlayList p : this.playlists) {
-			System.out.println(p.getName());
-		}
-	}
-	
-	// print song + title for every song in playlist
-	public void printPlayListByName(String name) {
-		boolean printed = false;
-		for (PlayList p : this.playlists) {
-			if (p.getName().equals(name)) {
-				printed = true;
-				ArrayList<Song> playlistSongs = p.getSongs();
-				
-				for (Song s : playlistSongs) {
-					System.out.println(s.getArtist() + ": " + s.getTitle());
+			ArrayList<Song> copyTracklist = new ArrayList<Song>();
+			for (Song s : a.getTracklist()) {
+				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+				if (s.isFavorite()) {
+					copySong.markFavorite();
 				}
+				copyTracklist.add(copySong);
+			}
+			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
+			copyAlbums.add(aCopy);
+		}
+		
+		return copyAlbums;
+	}
+	
+	// return all artists
+	public ArrayList<String> getArtists() {
+		ArrayList<String> artists = new ArrayList<String>();
+		
+		for (String a : this.artists) {
+			artists.add(a);
+		}
+		
+		return artists;
+	}
+	
+	// return all favorite songs
+	public ArrayList<Song> getFavorites() {
+		ArrayList<Song> copyList = new ArrayList<Song>();
+		for (Song s : this.songs) {	
+			Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+			if (s.isFavorite()) {
+				copySong.markFavorite();
+				copyList.add(copySong);
 			}
 		}
 		
-		if (!printed) {
-			System.out.println("No playlist with this name");
-		}
+		return copyList;
 	}
 	
-	public void addSongToPlayList(String name, Song s) {
-		boolean printed = false;
+	// return all playlists
+	public ArrayList<PlayList> getPlaylists() {
+		ArrayList<PlayList> copyList = new ArrayList<PlayList>();
 		for (PlayList p : this.playlists) {
-			if (p.getName().equals(name)) {
-				printed = true;
+			ArrayList<Song> copyTracklist = new ArrayList<Song>();
+			for (Song s : p.getSongs()) {
+				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+				if (s.isFavorite()) {
+					copySong.markFavorite();
+				}
+				copyTracklist.add(copySong);
+			}
+			PlayList pCopy = new PlayList(p.getName(), copyTracklist);
+			copyList.add(pCopy);
+		}
+		
+		return copyList;
+	}
+	
+	// print song + title for every song in playlist
+	public PlayList getPlayListByName(String name) {
+		for (PlayList p : this.playlists) {
+			if (p.getName().toLowerCase().equals(name.toLowerCase())) {
+				ArrayList<Song> copyTracklist = new ArrayList<Song>();
+				for (Song s : p.getSongs()) {
+					Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+					if (s.isFavorite()) {
+						copySong.markFavorite();
+					}
+					copyTracklist.add(copySong);
+				}
+				PlayList pCopy = new PlayList(p.getName(), copyTracklist);
+				return pCopy;
+			}
+		}
+		
+		return null;
+	}
+	
+	public boolean addSongToPlayList(String playlist, String song) {
+		boolean retval = false;
+		
+		Song s = this.getSongByTitle(song);
+		
+		if (s == null) {
+			return false;
+		}
+		
+		for (PlayList p : this.playlists) {
+			if (p.getName().toLowerCase().equals(playlist.toLowerCase())) {
+				retval = true;
 				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
 				p.addSong(copySong);
 			}
 		}
 		
-		if (!printed) {
-			System.out.println("No playlist with this name");
+		return retval;
+	}
+	
+	public boolean removeSongFromPlayList(String playlist, String song) {
+		boolean retval = false;
+		
+		Song s = this.getSongByTitle(song);
+		
+		if (s == null) {
+			return false;
+		}
+		
+		for (PlayList p : this.playlists) {
+			if (p.getName().toLowerCase().equals(playlist.toLowerCase())) {
+				p.removeSong(s);
+				retval = true;
+			}
+		}
+		
+		return retval;
+	}
+	
+	public void markAsFavorite(String title) {
+		for (Song s : this.songs) {
+			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {
+				s.markFavorite();
+			}
 		}
 	}
 	
-	// print a song along with its other information
-	private void printSong(Song s) {
-		System.out.println("Song title: " + s.getTitle());
-		System.out.println("Artist: " + s.getArtist());
-		System.out.println("Album: " + s.getAlbum());
-		System.out.println();
-	}
-	
-	// print an album along with its other information
-	private void printAlbum(Album a) {
-		System.out.println("Album title: " + a.getTitle());
-		System.out.println("Artist: " + a.getArtist());
-		System.out.println("Genre: " + a.getGenre());
-		System.out.println("Year: " + a.getYear());
-		System.out.println("Tracklist:");
-		
-		for (Song s : a.getTracklist()) {
-			System.out.println(s.getTitle());
+	public void rateSong(String title, int rating) {
+		for (Song s : this.songs) {
+			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {
+				s.rate(rating);
+				
+			}
 		}
-		System.out.println();
-	}
-	
-	public static void main(String[] args) {
-		MusicStore ms = new MusicStore();
-		LibraryModel lib = new LibraryModel();
-		//ArrayList<Album> albumlist = ms.getAlbumList();
-		
-		//System.out.println("MusicStore:"); // Placeholder code; better suited for View.java
-		
-		//for (Album a : albumlist) {
-		//	System.out.println(a.getTracklist().get(0).getAlbum());
-		//}
-
-		//Song tapestry = ms.getSongByTitle("Tapestry", true);
-		
-		
-		
-		lib.addAlbum("19");
-		lib.addSong("Tapestry");
-		lib.addSong("Tired");
-		
-		for (Song s : lib.songs) {
-			System.out.println(s.getTitle());
-		}
-		System.out.println();
-		
-		for (Album a : lib.albums) {
-			System.out.println(a.getTitle());
-		}
-		
-		System.out.println();
-		for (String s : lib.artists) {
-			System.out.println(s);
-		}
-		
-		lib.makePlaylist("my playlist");
-		lib.addSongToPlayList("my playlist", ms.getSongByTitle("Tapestry", false));
-		
 	}
 
 }

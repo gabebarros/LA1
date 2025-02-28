@@ -84,67 +84,39 @@ public class MusicStore {
         return albumList;
 	}
 	
-//	public ArrayList<Album> getAlbumList(){
-//		ArrayList<Album> copyAlbumList = new ArrayList<Album>();
-//		
-//		for (Album a : this.albumList) {
-//			ArrayList<Song> copyTracklist = new ArrayList<Song>();
-//			for (Song s : a.getTracklist()) {
-//				copyTracklist.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
-//			}
-//			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
-//			copyAlbumList.add(aCopy);
-//		}
-//		
-//		return copyAlbumList;
-//	}
-//	
-	public Album getAlbumByTitle(String title, boolean print){
+	public Album getAlbumByTitle(String title){
 		for (Album a : this.albumList) {
-			if (a.getTitle().equals(title)) {
+			if (a.getTitle().toLowerCase().equals(title.toLowerCase())) {
 				ArrayList<Song> copyTracklist = new ArrayList<Song>();
 				for (Song s : a.getTracklist()) {
 					copyTracklist.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
 				}
 				
 				Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
-				if (print) {
-					printAlbum(aCopy);
-				}
 				return aCopy;
 			}
 		}
 		
-		System.out.println("No album with this title");
 		return null;
 	}
 	
-	public Song getSongByTitle(String title, boolean print){
-		Song retval = null;
+	public ArrayList<Song> getSongByTitle(String title){
+		ArrayList<Song> songList = new ArrayList<Song>();
 		for (Album a : this.albumList) {
 			for (Song s : a.getTracklist()) {
-				if (s.getTitle().equals(title)) {
-					if (print) {
-						printSong(s);
-					}
-					
-					retval = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+				if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {
+					songList.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
 				}
 			}
 		}
 		
-		if (retval != null) {
-			return retval;
-		}
-		
-		System.out.println("No song with this title");
-		return null;
+		return songList;
 	}
 	
-	public ArrayList<Album> getAlbumsByArtist(String artist, boolean print){
+	public ArrayList<Album> getAlbumsByArtist(String artist){
 		ArrayList<Album> searchedAlbums = new ArrayList<Album>();
 		for (Album a : this.albumList) {
-			if (a.getArtist().equals(artist)) {
+			if (a.getArtist().toLowerCase().equals(artist.toLowerCase())) {
 				ArrayList<Song> copyTracklist = new ArrayList<Song>();
 				for (Song s : a.getTracklist()) {
 					copyTracklist.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
@@ -156,58 +128,27 @@ public class MusicStore {
 		}
 		
 		if (searchedAlbums.size() == 0) {
-			System.out.println("No albums by this artist");
 			return null;
 		}
 		
-		for (Album a : searchedAlbums) {
-			if (print) {
-				printAlbum(a);
-			}
-		}
 		return searchedAlbums;
 	}
 	
-	public ArrayList<Song> getSongsByArtist(String artist, boolean print){
+	public ArrayList<Song> getSongsByArtist(String artist){
 		ArrayList<Song> searchedSongs = new ArrayList<Song>();
 		for (Album a : this.albumList) {
 			for (Song s : a.getTracklist()) {
-				if (s.getArtist().equals(artist)) {
+				if (s.getArtist().toLowerCase().equals(artist.toLowerCase())) {
 					searchedSongs.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
 				}
 			}
 		}
 		
 		if (searchedSongs.size() == 0) {
-			System.out.println("No songs by this artist");
 			return null;
 		}
 		
-		for (Song s : searchedSongs) {
-			if (print) {
-				printSong(s);
-			}
-		}
 		return searchedSongs;
 	}
 	
-	private void printSong(Song s) {
-		System.out.println("Song title: " + s.getTitle());
-		System.out.println("Artist: " + s.getArtist());
-		System.out.println("Album: " + s.getAlbum());
-		System.out.println();
-	}
-	
-	private void printAlbum(Album a) {
-		System.out.println("Album title: " + a.getTitle());
-		System.out.println("Artist: " + a.getArtist());
-		System.out.println("Genre: " + a.getGenre());
-		System.out.println("Year: " + a.getYear());
-		System.out.println("Tracklist:");
-		
-		for (Song s : a.getTracklist()) {
-			System.out.println(s.getTitle());
-		}
-		System.out.println();
-	}
 }

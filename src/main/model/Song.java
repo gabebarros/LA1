@@ -49,11 +49,6 @@ public class Song {
 	}
 	
 	public void rate(int value) { // Maybe private for this method?
-		if (value < 1 || value > 5) {
-			System.out.println("Ratings must be between 1 and 5");
-			return;
-		}
-		
 		this.rating = value;
 		
 		if (this.rating == 5) {

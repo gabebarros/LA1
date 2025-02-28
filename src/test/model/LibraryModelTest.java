@@ -33,33 +33,33 @@ class LibraryModelTest {
 
 	@Test
 	void testGetAlbumByTitle_Found() {
-		Album foundAlbum = library.getAlbumByTitle("Test Album", false);
+		Album foundAlbum = library.getAlbumByTitle("Test Album");
 		assertNotNull(foundAlbum);
 		assertEquals(testAlbum, foundAlbum.getTitle());
 	}
 	
 	@Test
 	void testGetAlbumByTitle_NotFound() {
-		Album notFoundAlbum = library.getAlbumByTitle("Unknown Album", false);
+		Album notFoundAlbum = library.getAlbumByTitle("Unknown Album");
 		assertNull(notFoundAlbum);
 	}
 	
 	@Test
 	void testGetSongByTitle_Found() {
-		Song foundSong = library.getSongByTitle("Test Song", false);
+		Song foundSong = library.getSongByTitle("Test Song");
 		assertNotNull(foundSong);
 		assertEquals(testSong, foundSong.getTitle());
 	}
 	
 	@Test
 	void testGetSongByTitle_NotFound() {
-		Song notFoundSong = library.getSongByTitle("Unknown Song", false);
+		Song notFoundSong = library.getSongByTitle("Unknown Song");
 		assertNull(notFoundSong);
 	}
 	
 	@Test
 	void testGetAlbumsByArtist_Found() {
-		ArrayList<Album> artistAlbum = library.getAlbumsByArtist("Test Artist", false);
+		ArrayList<Album> artistAlbum = library.getAlbumsByArtist("Test Artist");
 		assertNotNull(artistAlbum);
 	}
 

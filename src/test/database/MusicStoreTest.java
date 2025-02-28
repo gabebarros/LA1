@@ -48,8 +48,7 @@ class MusicStoreTest {
 
 	@Test
 	void testGetAlbumByTitle_Found() {
-		Album result = musicStore.getAlbumByTitle("Album 1", false);
-		result = musicStore.getAlbumByTitle("Album 1", true);
+		Album result = musicStore.getAlbumByTitle("Album 1");
 		assertNotNull(result);
 		assertEquals("Album 1", result.getTitle());
 		assertEquals("Artist X", result.getArtist());
@@ -57,32 +56,28 @@ class MusicStoreTest {
 	
 	@Test
 	void testGetAlbumByTitle_NotFound() {
-		Album result = musicStore.getAlbumByTitle("Nonexistent Album", false);
-		result = musicStore.getAlbumByTitle("Nonexistent Album", true);
+		Album result = musicStore.getAlbumByTitle("Nonexistent Album");
 		assertNull(result);
 	}
 	
 	@Test
 	void testGetSongByTitle_Found() {
-		Song result = musicStore.getSongByTitle("Song A", false);
-		result = musicStore.getSongByTitle("Song A", true);
+		ArrayList<Song> result = musicStore.getSongByTitle("Song A");
 		assertNotNull(result);
-		assertEquals("Song A", result.getTitle());
-		assertEquals("Artist X", result.getArtist());
+		assertEquals("Song A", result.get(0).getTitle());
+		assertEquals("Artist X", result.get(0).getArtist());
 	}
 	
 	@Test
 	void testGetSongByTitle_NotFound() {
-		Song result = musicStore.getSongByTitle("Nonexistent Song", false);
-		result = musicStore.getSongByTitle("Nonexistent Song", true);
+		ArrayList<Song> result = musicStore.getSongByTitle("Nonexistent Song");
 		
-		assertNull(result);
+		assertEquals(result.size(), 0);
 	}
 	
 	@Test
 	void testGetAlbumsByArtist_Found() {
-		ArrayList<Album> albums = musicStore.getAlbumsByArtist("Artist X", false);
-		albums = musicStore.getAlbumsByArtist("Artist X", true);
+		ArrayList<Album> albums = musicStore.getAlbumsByArtist("Artist X");
 		assertNotNull(albums);
 		assertEquals(1, albums.size());
 		assertEquals("Album 1", albums.get(0).getTitle());
@@ -90,15 +85,13 @@ class MusicStoreTest {
 	
 	@Test
 	void testGetAlbumsByArtist_NotFound() {
-		ArrayList<Album> albums = musicStore.getAlbumsByArtist("Unknown Artist", false);
-		albums = musicStore.getAlbumsByArtist("Unknown Artist", true);
+		ArrayList<Album> albums = musicStore.getAlbumsByArtist("Unknown Artist");
 		assertNull(albums);
 	}
 	
 	@Test 
 	void testGetSongsByArtist_Found() {
-		ArrayList<Song> songs = musicStore.getSongsByArtist("Artist X", false);
-		songs = musicStore.getSongsByArtist("Artist X", true);
+		ArrayList<Song> songs = musicStore.getSongsByArtist("Artist X");
 		assertNotNull(songs);
 		assertEquals(2, songs.size());
 		assertEquals("Song A", songs.get(0).getTitle());
@@ -107,8 +100,7 @@ class MusicStoreTest {
 	
 	@Test
 	void testGetSongsByArtist_NotFound() {
-		ArrayList<Song> songs = musicStore.getSongsByArtist("Unknown Artist", false);
-		songs = musicStore.getSongsByArtist("Unknown Artist", true);
+		ArrayList<Song> songs = musicStore.getSongsByArtist("Unknown Artist");
 		assertNull(songs);
 	}	
 }

@@ -116,6 +116,10 @@ public class LibraryModel {
 	public void addSong(String songTitle) {
 		MusicStore ms = new MusicStore();
 		
+		if (ms.getSongByTitle(songTitle).size() == 0) {
+			return;
+		}
+		
 		Song songToAdd = ms.getSongByTitle(songTitle).get(0);	
 		
 		// check if song exists

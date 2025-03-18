@@ -107,20 +107,5 @@ public class UserDB {
 		
 		return hashedPassword;
 	}
-	
-	public static void main(String[] args) {
-		UserDB db = new UserDB();
-		try {
-			db.addUser("gabe", "123");
-			db.addUser("soph", "1234");
-			
-			System.out.println(db.loginSuccessful("gabe", "123"));  // true
-			System.out.println(db.loginSuccessful("gabe", "1234"));  // false
-			System.out.println(db.loginSuccessful("gabsde", "123"));  // false
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 }

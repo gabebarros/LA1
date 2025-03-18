@@ -10,14 +10,17 @@
  */
 package main.view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import main.database.MusicStore;
+import main.database.UserDB;
 import main.model.Album;
 import main.model.LibraryModel;
 import main.model.PlayList;
 import main.model.Song;
+import main.model.User;
 
 public class View {
 	
@@ -92,7 +95,11 @@ public class View {
 	
 	public static void main(String[] args) {
 		MusicStore ms = new MusicStore();
-		LibraryModel library = new LibraryModel();
+		LibraryModel genericLibrary = new LibraryModel();
+		LibraryModel library = genericLibrary;
+		UserDB db = new UserDB();
+		
+		User currentUser = null;
 		
 		Scanner scanner = new Scanner(System.in);  // use to get user input
 	     
@@ -105,7 +112,65 @@ public class View {
 	        	break;
 	        }
 	        
-	        if (input.equals("search music store")) {
+	        else if (input.equals("create user")) {
+	        	System.out.println("What is your username?");
+	        	System.out.println();
+	        	
+	        	String username = scanner.nextLine().toLowerCase().strip();
+	        	
+	        	System.out.println("What is your password?");
+	        	System.out.println();
+	        	
+	        	String password = scanner.nextLine().toLowerCase().strip();
+	        	
+	        	try {
+					if (!db.addUser(username, password)) {
+						System.out.println("Username is taken");
+			        	System.out.println();
+					}
+					else {
+						System.out.println("Successfully added user");
+			        	System.out.println();
+					}
+				} catch (IOException e) {
+					System.out.println("Error: could not access database");
+		        	System.out.println();
+				}
+	        	
+	        }
+	        
+	        else if (input.equals("login")) {
+	        	System.out.println("What is your username?");
+	        	System.out.println();
+	        	
+	        	String username = scanner.nextLine().toLowerCase().strip();
+	        	
+	        	System.out.println("What is your password?");
+	        	System.out.println();
+	        	
+	        	String password = scanner.nextLine().toLowerCase().strip();
+	        	
+	        	if (db.loginSuccessful(username, password)) {
+	        		currentUser = db.getUser(username);
+	        		library = currentUser.getLibrary();
+	        		System.out.println("Logged in successfully");
+		        	System.out.println();
+	        	}
+	        	else {
+	        		System.out.println("Username or password is incorrect");
+		        	System.out.println();
+	        	}
+	        	
+	        }
+	        
+	        else if (input.equals("log out")) {
+	        	currentUser = null;
+	        	library = genericLibrary;
+	        	System.out.println("You are logged out");
+	        	System.out.println();
+	        }
+	        
+	        else if (input.equals("search music store")) {
 	        	System.out.println("Do you want to search for song(s) or album(s)?");
 	        	System.out.println();
 	        	

@@ -16,14 +16,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import main.database.MusicStore;
 
-public class LibraryModel {
+public class LibraryModel implements Iterable<Song> {
 	
 	protected ArrayList<Song> songs;
 	protected ArrayList<Album> albums;
@@ -518,6 +520,37 @@ public class LibraryModel {
 		}
 	
 		return searchedSongs;
+	}
+	
+	/**
+	 * Shuffles the songs in the library.
+	 */
+	public void shuffleSongs() {
+		Collections.shuffle(songs);
+	}
+	
+	/**
+	 * Returns an iterator to allow for-each loops over shuffled songs.
+	 */
+	@Override
+	public Iterator<Song> iterator() {
+		List<Song> shuffledSongs = new ArrayList<>(songs);
+		Collections.shuffle(shuffledSongs);
+		return shuffledSongs.iterator();
+	}
+	
+	/**
+	 * Shuffles the songs in a specific playlist.
+	 * @param playlistName The name of the playlist to shuffle.
+	 */
+	public void shufflePlayList(String playlistName) {
+		for (PlayList p : playlists) {
+			if (p.getName().equalsIgnoreCase(playlistName)) {
+				p.shuffle();
+				return;
+			}
+		}
+		System.out.println("Playlist not found.");
 	}
 
 }

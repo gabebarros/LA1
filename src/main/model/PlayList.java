@@ -9,6 +9,7 @@
 package main.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import main.database.MusicStore;
 
@@ -65,4 +66,10 @@ public class PlayList {
 		}
 	}
 	
+	/**
+	 * Shuffles the songs in the PlayList.
+	 */
+	public void shuffle() {
+		Collections.shuffle(songs);
+	}
 }

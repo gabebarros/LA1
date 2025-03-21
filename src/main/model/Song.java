@@ -16,11 +16,13 @@ public class Song {
 	private String album;
 	private int rating;
 	private boolean favorite;
+	private int playCount; // New field to track play count
 	
 	public Song(String title, String artist, String album) {
 		this.title = title;
 		this.artist = artist;
 		this.album = album;
+		this.playCount = 0; // Initialize play count
 	}
 	
 	public Song(String title, String artist, String album, int rating) {
@@ -66,6 +68,14 @@ public class Song {
 		else {
 			this.favorite = false;
 		}
+	}
+	
+	public void play() {
+		this.playCount++; // Increment play count when played
+	}
+	
+	public int getPlayCount() {
+		return this.playCount;
 	}
 	
 }

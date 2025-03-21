@@ -344,5 +344,29 @@ public class LibraryModel {
 			}
 		}
 	}
+	
+	// returns song list by genre if they exist else, returns null
+	public ArrayList<Song> getSongsByGenre(String genre){
+		ArrayList<Song> searchedSongs = new ArrayList<Song>();
+		MusicStore ms = new MusicStore();
+		
+		for (Song s : this.songs) {
+			Album a = ms.getAlbumByTitle(s.getAlbum());
+			if (a.getGenre().toLowerCase().equals(genre.toLowerCase())) {
+				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+				if (s.isFavorite()) {
+					copySong.markFavorite();
+				}
+				searchedSongs.add(copySong);
+			}
+			
+		}
+		
+		if (searchedSongs.size() == 0) {
+			return null;
+		}
+	
+		return searchedSongs;
+	}
 
 }

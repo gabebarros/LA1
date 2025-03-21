@@ -243,4 +243,28 @@ class LibraryModelTest {
 		boolean removed = library.removeSongFromPlayList("Study Mix", "Unknown Song");
 		assertFalse(removed);
 	}
+	
+	@Test
+	void testGetSongsByGenre_Success() {
+		LibraryModel lib = new LibraryModel();
+		
+		lib.addSong("tapestry");
+		lib.addSong("beautiful");
+		lib.rateSong("tapestry", 5);
+		ArrayList<Song> rock_songs = lib.getSongsByGenre("Rock");
+		
+		assertEquals(rock_songs.size(), 2);
+	}
+	
+	@Test
+	void testGetSongsByGenre_NoSongs() {
+		LibraryModel lib = new LibraryModel();
+		
+		lib.addSong("tapestry");
+		lib.addSong("beautiful");
+		
+		ArrayList<Song> pop_songs = lib.getSongsByGenre("Pop");
+		
+		assertNull(pop_songs);
+	}
 }

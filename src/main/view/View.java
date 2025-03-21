@@ -451,6 +451,16 @@ public class View {
 	        	}
 	        	
 	        }
+	        
+	        else if (input.equals("list songs by genre")) {
+	        	System.out.println("Which genre?");
+	        	System.out.println();
+	        	
+	        	input = scanner.nextLine().strip();
+	        	
+	        	printSongList(library.getSongsByGenre(input));
+	        }
+	     
 	        else {
 	        	System.out.println("Invalid command, try again");
         		System.out.println();
@@ -458,6 +468,6 @@ public class View {
 	     
 	     }
 	     
-	  scanner.close();  
+	  scanner.close(); 
 	 }
 }

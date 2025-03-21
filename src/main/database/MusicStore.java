@@ -38,7 +38,7 @@ public class MusicStore {
 		try {
 			reader = new BufferedReader(new FileReader(albums));
 		} catch (FileNotFoundException e) {
-			System.out.println("albums.txt could not be found");
+        	e.printStackTrace();
             System.exit(-1);
 		}
 		
@@ -56,7 +56,7 @@ public class MusicStore {
 			    albumFileNameList.add(albumFileName);
 			}
 		} catch (IOException e) {
-			System.out.println("Error reading from albums.txt");
+			e.printStackTrace();
             System.exit(-1);
 		}
         
@@ -85,11 +85,11 @@ public class MusicStore {
 				albumList.add(curAlbum);
 				
 			} catch (FileNotFoundException e) {
-				System.out.println("File " + albumFileName + " could not be found");
+				e.printStackTrace();
 				System.exit(-1);
 			} catch (IOException e) {
-                System.out.println("Error reading file: " + albumFileName);
-                System.exit(-1);
+				e.printStackTrace();
+				System.exit(-1);
             }
         }
         

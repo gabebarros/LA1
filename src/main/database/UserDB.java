@@ -43,6 +43,7 @@ public class UserDB {
         }
         catch (IOException e) {
         	e.printStackTrace();
+        	System.exit(-1);
         }
         
         return true;
@@ -77,8 +78,10 @@ public class UserDB {
             }
         } catch (FileNotFoundException e) {
         	e.printStackTrace();
+        	System.exit(-1);
         } catch (IOException e) {
         	e.printStackTrace();
+        	System.exit(-1);
         }
 		
 		return false;
@@ -103,6 +106,7 @@ public class UserDB {
 		} 
 		catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+			System.exit(-1);
 		}
 		
 		return hashedPassword;

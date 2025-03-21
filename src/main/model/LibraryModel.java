@@ -105,6 +105,59 @@ public class LibraryModel {
 		savePlayHistory();
 	}
 	
+	/**
+	 * Returns a list of songs sorted by the specified criterion and order.
+	 * @param criterion: "title", "artist", or "rating"
+	 * @param ascending True for ascending order, false for descending order
+	 * @return A sorted list of songs.
+	 */
+	public List<Song> getSortedSongs(String criterion, boolean ascending) {
+		List<Song> sortedSongs = new ArrayList<>(songs); // Copy list to avoid modifying original
+		
+		Comparator<Song> comparator;
+		
+		switch (criterion.toLowerCase()) {
+			case "title":
+				comparator = Comparator.comparing(Song::getTitle, String.CASE_INSENSITIVE_ORDER);
+				break;
+			case "artist":
+				comparator = Comparator.comparing(Song::getArtist, String.CASE_INSENSITIVE_ORDER);
+				break;
+			case "rating":
+				comparator = Comparator.comparingInt(Song::getRating);
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid sorting criterion. Use 'title', 'artist', or 'rating'.");
+		}
+		
+		if (!ascending) {
+			comparator = comparator.reversed(); // Reverse for descending order
+		}
+		
+		sortedSongs.sort(comparator);
+		return sortedSongs;
+	}
+	
+	// prints list of songs by sorting criterion
+	public void printSortedSongs(String criterion, boolean ascending) {
+		String order = ascending ? "Ascending" : "Descending";
+		
+		// Format the criterion to match capitalization 
+		String formattedCriterion = switch (criterion.toLowerCase()) {
+			case "title" -> "Title";
+			case "artist" -> "Artist";
+			case "rating" -> "Rating";
+			default -> throw new IllegalArgumentException("Invalid sorting criterion.");
+		};
+		
+		System.out.println("Sorted by " + formattedCriterion + " (" + order + "):");
+		
+		List<Song> sortedSongs = getSortedSongs(criterion, ascending);
+		for (Song song : sortedSongs) {
+			System.out.println(song);
+		}
+	}
+	
 	// returns album with title 'title' if it exists, else returns null
 	public Album getAlbumByTitle(String title){
 		for (Album a : this.albums) {

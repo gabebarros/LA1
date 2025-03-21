@@ -503,8 +503,7 @@ public class LibraryModel implements Iterable<Song> {
 	 * @return True if removed, false if not found.
 	 */
 	public boolean removeSong(String title, String artist) {
-		return songs.removeIf(song -> song.getTitle().equalsIgnoreCase(title) && 
-									  song.getArtist().equalsIgnoreCase(artist));
+		return songs.removeIf(song -> song.getTitle().equalsIgnoreCase(title) && song.getArtist().equalsIgnoreCase(artist));
 	}
 	
 	/**

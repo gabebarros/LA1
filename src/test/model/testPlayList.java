@@ -73,6 +73,9 @@ class testPlayList {
 		
 		ArrayList<Song> tracklist2 = testPL2.getSongs();
 		assertEquals(tracklist2.size(), 0);
+		
+		PlayList newPlaylist = new PlayList("Unspecified Vibe", tracklist);
+		newPlaylist.shuffle();
 
 	}
 

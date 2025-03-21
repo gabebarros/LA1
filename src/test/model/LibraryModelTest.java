@@ -267,4 +267,76 @@ class LibraryModelTest {
 		
 		assertNull(pop_songs);
 	}
+	
+	@Test
+	void testPlaySong() {
+		LibraryModel lib = new LibraryModel();
+		// Add 10+ songs and play them for full coverage
+		lib.addSong("tapestry"); // valid song
+		lib.playSong("tapestry");
+		lib.addSong("Politik"); 
+		lib.playSong("Politik"); 
+		lib.addSong("In My Place");
+		lib.playSong("In My Place");
+		lib.addSong("The Scientist");
+		lib.playSong("The Scientist");
+		lib.addSong("Clocks");
+		lib.playSong("Clocks");
+		lib.addSong("Daylight");
+		lib.playSong("Daylight");
+		lib.addSong("Green Eyes");
+		lib.playSong("Green Eyes");
+		lib.addSong("A Whisper");
+		lib.playSong("A Whisper");
+		lib.addSong("A Rush of Blood to the Head");
+		lib.playSong("A Rush of Blood to the Head");
+		lib.addSong("Amsterdam");
+		lib.playSong("Amsterdam");
+		lib.addSong("Warning Sign");
+		lib.playSong("Warning Sign");
+		lib.playSong("Warning Sign");
+		
+		lib.addSong("blanket");  // invalid song
+		lib.playSong("blanket");
+		
+		lib.getRecentlyPlayed();
+		lib.getFrequentlyPlayed();
+		lib.shutdown(); // Need user login data for full coverage (load/save)
+		
+	}
+	
+	@Test
+	void testSortingSongs() {
+		library.printSortedSongs("title", true);
+		library.printSortedSongs("artist", false);
+		library.printSortedSongs("rating", true);
+	}
+	
+	@Test
+	void testRemoveSongAndAlbum() {
+		library.removeSong("Song A", "Artist X");
+		library.removeAlbum("Album 1");
+	}
+	
+	@Test
+	void testShuffle() {
+		library.shuffleSongs();
+		library.iterator();
+		PlayList newPlaylist = library.makePlaylist("Test Playlist");
+		PlayList anotherPlaylist = library.makePlaylist("Cool Playlist");
+		library.shufflePlayList("Test Playlist");
+		library.shufflePlayList("PlayList"); // Playlist not found
+	}
+	
+	@Test
+	void testGetAlbumInfoBySong() {
+		library.addSong("tapestry");
+		library.getAlbumInfoBySong("tapestry");
+		library.addSong("Warning Sign");
+		library.addAlbum("A Rush of Blood to the Head");
+		library.getAlbumInfoBySong("Warning Sign");
+		library.getAlbumInfoBySong("Dupe Song");
+		
+	}
+	
 }

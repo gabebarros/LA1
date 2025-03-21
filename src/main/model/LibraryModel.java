@@ -458,6 +458,27 @@ public class LibraryModel {
 		return retval;
 	}
 	
+	/**
+	 * Removes a song by title and artist.
+	 * @param title The title of the song.
+	 * @param artist The artist of the song.
+	 * @return True if removed, false if not found.
+	 */
+	public boolean removeSong(String title, String artist) {
+		return songs.removeIf(song -> song.getTitle().equalsIgnoreCase(title) && 
+									  song.getArtist().equalsIgnoreCase(artist));
+	}
+	
+	/**
+	 * Removes an album by title.
+	 * @param title The title of the album.
+	 * @return True if removed, false if not found.
+	 * @param title
+	 */
+	public boolean removeAlbum(String title) {
+		return albums.removeIf(album -> album.getTitle().equalsIgnoreCase(title));
+	}
+	
 	public void markAsFavorite(String title) {
 		for (Song s : this.songs) {
 			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {

@@ -10,7 +10,16 @@
  */
 package main.model;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
 
 import main.database.MusicStore;
 
@@ -21,11 +30,79 @@ public class LibraryModel {
 	private ArrayList<String> artists;
 	private ArrayList<PlayList> playlists;
 	
+	private LinkedList<Song> recentlyPlayed; // Stores the last 10 songs played
+	private PriorityQueue<Song> frequentlyPlayed; // Stores the top 10 most played 
+	
 	public LibraryModel() {
 		this.songs = new ArrayList<Song>();
 		this.albums = new ArrayList<Album>();
 		this.artists = new ArrayList<String>();
 		this.playlists = new ArrayList<PlayList>();
+		this.recentlyPlayed = new LinkedList<>();
+		this.frequentlyPlayed = new PriorityQueue<>(10, Comparator.comparingInt(Song::getPlayCount).reversed());
+		
+		loadPlayHistory(); // Load play history on startup
+	}
+	
+	public void playSong(String title) {
+		Song song = getSongByTitle(title);
+		if (song == null) {
+			System.out.println("Song not found.");
+			return;
+		}
+		
+		song.play(); // Increase play count
+		
+		// Add to Recently Played
+		recentlyPlayed.remove(song); // Avoid duplicates
+		recentlyPlayed.addFirst(song);
+		if (recentlyPlayed.size() > 10) {
+			recentlyPlayed.removeLast(); // Keep only the last 10
+		}
+		
+		// Add to Frequently Played
+		frequentlyPlayed.remove(song); // Remove old entry
+		frequentlyPlayed.add(song); // Reinsert with updated play count
+		if (frequentlyPlayed.size() > 10) {
+			frequentlyPlayed.poll(); // Keep only the top 10; .poll removes and returns head of queue
+		}
+	}
+	
+	public List<Song> getRecentlyPlayed() {
+		return new ArrayList<>(recentlyPlayed);
+	}
+	
+	public List<Song> getFrequentlyPlayed() {
+		List<Song> sortedList = new ArrayList<>(frequentlyPlayed);
+		sortedList.sort(Comparator.comparingInt(Song::getPlayCount).reversed());
+		return sortedList;
+	}
+	
+	// Save Play History before Exiting
+	public void savePlayHistory() {
+		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("playHistory.dat"))) {
+			out.writeObject(recentlyPlayed);
+			out.writeObject(new ArrayList<>(frequentlyPlayed)); // Convert PriorityQueue to List before saving
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Load Play History When Application Starts
+	@SuppressWarnings("unchecked")
+	public void loadPlayHistory() {
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("playHistory.dat"))) {
+			recentlyPlayed = ((LinkedList<Song>) in.readObject());
+			frequentlyPlayed = new PriorityQueue<>(10, Comparator.comparingInt(Song::getPlayCount).reversed());
+			frequentlyPlayed.addAll((List<Song>) in.readObject());
+		} catch (IOException | ClassNotFoundException e) {
+			System.out.println("No previous play history found.");
+		}
+	}
+	
+	// Call this when exiting the program to save the history
+	public void shutdown() {
+		savePlayHistory();
 	}
 	
 	// returns album with title 'title' if it exists, else returns null

@@ -165,7 +165,12 @@ public class View {
 	        
 	        else if (input.equals("log out")) {
 	        	currentUser = null;
-	        	library = genericLibrary;
+	        	
+	        	// Before exiting, save play history
+			    library.savePlayHistory();
+				System.out.println("Play History saved.");
+				
+	        	library = genericLibrary; // Reset library
 	        	System.out.println("You are logged out");
 	        	System.out.println();
 	        }
@@ -467,7 +472,8 @@ public class View {
 	        }
 	     
 	     }
-	     
+	 
 	  scanner.close(); 
+	  
 	 }
 }

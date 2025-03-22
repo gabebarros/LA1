@@ -522,6 +522,19 @@ public class View {
 	        	}
 	        }
 	        
+	        // Sort by title, artist, or rating
+	        else if (input.equals("sort songs")) {
+	        	System.out.println("What will you sort by? (title/artist/rating)");
+	        	String criterion = scanner.nextLine().strip();
+	        	System.out.println("Ascending or Descending? (A/D)");
+	        	String ascending = scanner.nextLine().strip();
+	        	if (ascending.equals("A")) {
+	        		library.printSortedSongs(criterion, true);
+	        	} else {
+	        		library.printSortedSongs(criterion, false);
+	        	}
+	        	
+	        }
 	        // Show Recently and Frequently Played Songs
 	        else if (input.equals("play song")) {
 	        	System.out.println("Which song?");

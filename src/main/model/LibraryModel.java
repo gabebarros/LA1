@@ -157,7 +157,7 @@ public class LibraryModel implements Iterable<Song> {
 		
 		List<Song> sortedSongs = getSortedSongs(criterion, ascending);
 		for (Song song : sortedSongs) {
-			System.out.println(song);
+			System.out.println(song.getTitle());
 		}
 	}
 	

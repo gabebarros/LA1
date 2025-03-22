@@ -166,7 +166,7 @@ public class View {
 	        // Logging out
 	        else if (input.equals("log out")) {
 	        	// Before exiting, save play history
-			    library.savePlayHistory();
+			    library.shutdown();
 				System.out.println("Play History saved.");
 				
 	        	currentUser = null;       // Reset user
@@ -327,6 +327,7 @@ public class View {
 	        	input = scanner.nextLine().strip();
 	        	
 	        	library.addAlbum(input);
+	        	System.out.println(input + " added.");
 	        }
 	        // List added songs
 	        else if (input.equals("list my songs")) {
@@ -522,6 +523,11 @@ public class View {
 	        }
 	        
 	        // Show Recently and Frequently Played Songs
+	        else if (input.equals("play song")) {
+	        	System.out.println("Which song?");
+	        	String songTitle = scanner.nextLine().strip();
+	        	library.playSong(songTitle);
+	        }
 	        else if (input.equals("list recently played")) {
 	        	System.out.println("Recently Played Songs:");
 	        	printSongList(new ArrayList<>(library.getRecentlyPlayed()));

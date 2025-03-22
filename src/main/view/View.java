@@ -111,7 +111,7 @@ public class View {
 	        if (input.equals("quit")) {
 	        	break;
 	        }
-	        
+	        // Create a User
 	        else if (input.equals("create user")) {
 	        	System.out.println("What is your username?");
 	        	System.out.println();
@@ -138,7 +138,7 @@ public class View {
 				}
 	        	
 	        }
-	        
+	        // Logging in
 	        else if (input.equals("login")) {
 	        	System.out.println("What is your username?");
 	        	System.out.println();
@@ -153,6 +153,7 @@ public class View {
 	        	if (db.loginSuccessful(username, password)) {
 	        		currentUser = db.getUser(username);
 	        		library = currentUser.getLibrary();
+	        		library.loadPlayHistory();
 	        		System.out.println("Logged in successfully");
 		        	System.out.println();
 	        	}
@@ -162,19 +163,18 @@ public class View {
 	        	}
 	        	
 	        }
-	        
+	        // Logging out
 	        else if (input.equals("log out")) {
-	        	currentUser = null;
-	        	
 	        	// Before exiting, save play history
 			    library.savePlayHistory();
 				System.out.println("Play History saved.");
 				
+	        	currentUser = null;       // Reset user
 	        	library = genericLibrary; // Reset library
 	        	System.out.println("You are logged out");
 	        	System.out.println();
 	        }
-	        
+	        // Searching MusicStore
 	        else if (input.equals("search music store")) {
 	        	System.out.println("Do you want to search for song(s) or album(s)?");
 	        	System.out.println();
@@ -231,7 +231,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
-	        
+	        // Searching library
 	        else if (input.equals("search library")) {
 	        	System.out.println("What do you want to search for?");
 	        	System.out.println();
@@ -310,7 +310,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
-	        
+	        // Add Song to library
 	        else if (input.equals("add song")) {
 	        	System.out.println("Which song?");
 	        	System.out.println();
@@ -319,7 +319,7 @@ public class View {
 	        	
 	        	library.addSong(input);
 	        }
-	        
+	        // Add Album to library
 	        else if (input.equals("add album")) {
 	        	System.out.println("Which album?");
 	        	System.out.println();
@@ -328,11 +328,11 @@ public class View {
 	        	
 	        	library.addAlbum(input);
 	        }
-	        
+	        // List added songs
 	        else if (input.equals("list my songs")) {
 	        	printSongList(library.getSongs());
 	        }
-	        
+	        // List added artists
 	        else if (input.equals("list my artists")) {
 	        	ArrayList<String> artists = library.getArtists();
 	        	
@@ -346,11 +346,11 @@ public class View {
 	        		}
 	        	}
 	        }
-	        
+	        // List added Albums
 	        else if (input.equals("list my albums")) {
 	        	printAlbumList(library.getAlbums());
 	        }
-	        
+	        // List created playlists
 	        else if (input.equals("list my playlists")) {
 	        	ArrayList<PlayList> playlists = library.getPlaylists();
 	        	
@@ -359,11 +359,11 @@ public class View {
 	        	}
 	        	System.out.println();
 	        }
-	        
+	        // List favorite songs
 	        else if (input.equals("list my favorite songs")) {
 	        	printSongList(library.getFavorites());
 	        }
-	        
+	        // Create a playlist
 	        else if (input.equals("create playlist")) {
 	        	System.out.println("What do you want to name your playlist?");
 	        	System.out.println();
@@ -375,7 +375,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
-	        
+	        // Add song to playlist
 	        else if (input.equals("add song to playlist")) {
 	        	System.out.println("Which playlist?");
 	        	System.out.println();
@@ -392,7 +392,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
-	        
+	        // Remove song from playlist
 	        else if (input.equals("remove song from playlist")) {
 	        	System.out.println("Which playlist?");
 	        	System.out.println();
@@ -409,7 +409,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
-	        
+	        // Mark as Favorite
 	        else if (input.equals("mark song as favorite")) {
 	        	System.out.println("Which song?");
 	        	System.out.println();
@@ -427,7 +427,7 @@ public class View {
 	        	}
 	        	
 	        }
-	        
+	        // Rate a song
 	        else if (input.equals("rate a song")) {
 	        	System.out.println("Which song?");
 	        	System.out.println();
@@ -456,7 +456,7 @@ public class View {
 	        	}
 	        	
 	        }
-	        
+	        // List songs by genre
 	        else if (input.equals("list songs by genre")) {
 	        	System.out.println("Which genre?");
 	        	System.out.println();
@@ -465,7 +465,73 @@ public class View {
 	        	
 	        	printSongList(library.getSongsByGenre(input));
 	        }
-	     
+	        
+	        // Search for a song and request album info
+	        else if (input.equals("search song")) {
+	        	System.out.println("Enter the song title:");
+	        	String title = scanner.nextLine().strip();
+	        	
+	        	Song song = library.getSongByTitle(title);
+	        	printSong(song);
+	        	
+	        	if (song != null) {
+	        		System.out.println("Would you like to see album info? (yes/no)");
+	        		if (scanner.nextLine().strip().equalsIgnoreCase("yes")) {
+	        			library.getAlbumInfoBySong(title);
+	        		}
+	        	}
+	        }
+	        
+	        // Shuffle library or playlist
+	        else if (input.equals("shuffle library")) {
+	        	library.shuffleSongs();
+	        	System.out.println("Library shuffled!");
+	        }
+	        
+	        else if (input.equals("shuffle playlist")) {
+	        	System.out.println("Enter the playlist name:");
+	        	String playlistName = scanner.nextLine().strip();
+	        	library.shufflePlayList(playlistName);
+	        	System.out.println("Playlist shuffled!");
+	        }
+	        
+	        // Remove song or album
+	        else if (input.equals("remove song")) {
+	        	System.out.println("Enter the song title:");
+	        	String songTitle = scanner.nextLine().strip();
+	        	
+	        	System.out.println("Enter the artist:");
+	        	String artist = scanner.nextLine().strip();
+	        	
+	        	if (library.removeSong(songTitle, artist)) {
+	        		System.out.println("Song removed.");
+	        	} else {
+	        		System.out.println("Song not found.");
+	        	}
+	        }
+	        
+	        else if (input.equals("remove album")) {
+	        	System.out.println("Enter the album title:");
+	        	String albumTitle = scanner.nextLine().strip();
+	        	
+	        	if (library.removeAlbum(albumTitle)) {
+	        		System.out.println("Album removed.");
+	        	} else {
+	        		System.out.println("Album not found.");
+	        	}
+	        }
+	        
+	        // Show Recently and Frequently Played Songs
+	        else if (input.equals("list recently played")) {
+	        	System.out.println("Recently Played Songs:");
+	        	printSongList(new ArrayList<>(library.getRecentlyPlayed()));
+	        }
+	        
+	        else if (input.equals("list frequently played")) {
+	        	System.out.println("Most Frequently Played Songs:");
+	        	printSongList(new ArrayList<>(library.getFrequentlyPlayed()));
+	        }
+	        
 	        else {
 	        	System.out.println("Invalid command, try again");
         		System.out.println();

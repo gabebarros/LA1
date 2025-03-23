@@ -200,42 +200,7 @@ public class LibraryModel implements Iterable<Song> {
 		
 		return null;
 	}
-	
-	/**
-	 * Retrieves album info for a given song.
-	 * @param songTitle The title of the song.
-	 * @return The album containing the song, or null if the song is not found.
-	 */
-	public Album getAlbumInfoBySong(String songTitle) {
-		Song song = getSongByTitle(songTitle);
-		if (song == null) {
-			System.out.println("Song not found in library.");
-			return null;
-		}
 		
-		String albumTitle = song.getAlbum();
-		Album album = getAlbumByTitle(albumTitle);
-		
-		if (album != null) {
-			System.out.println("Album found in your library:");
-		} else {
-			System.out.println("Album not in your library. Retrieving from Music Store...");
-			album = musicStore.getAlbumByTitle(albumTitle); // Fetch from MusicStore
-		}
-		
-		if (album != null) {
-			System.out.println("Album: " + album.getTitle() + " by " + album.getArtist());
-			System.out.println("Genre: " + album.getGenre() + " | Year: " + album.getYear());
-			System.out.println("Tracklist:");
-			for (Song track : album.getTracklist()) {
-				System.out.println("- " + track.getTitle());
-			}
-		} else {
-			System.out.println("Album information not found.");
-		}
-		return album;
-	}
-	
 	// returns album list by artist if they exist else, returns null
 	public ArrayList<Album> getAlbumsByArtist(String artist){
 		ArrayList<Album> searchedAlbums = new ArrayList<Album>();

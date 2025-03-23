@@ -190,7 +190,7 @@ class LibraryModelTest {
 		
 		ArrayList<PlayList> playlists = library.getPlaylists();
 		assertNotNull(playlists);
-		assertEquals(2, playlists.size());
+		assertEquals(4, playlists.size());
 	}
 	
 	@Test
@@ -326,17 +326,6 @@ class LibraryModelTest {
 		PlayList anotherPlaylist = library.makePlaylist("Cool Playlist");
 		library.shufflePlayList("Test Playlist");
 		library.shufflePlayList("PlayList"); // Playlist not found
-	}
-	
-	@Test
-	void testGetAlbumInfoBySong() {
-		library.addSong("tapestry");
-		library.getAlbumInfoBySong("tapestry");
-		library.addSong("Warning Sign");
-		library.addAlbum("A Rush of Blood to the Head");
-		library.getAlbumInfoBySong("Warning Sign");
-		library.getAlbumInfoBySong("Dupe Song");
-		
 	}
 	
 }

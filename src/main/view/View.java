@@ -199,6 +199,7 @@ public class View {
 			        	input = scanner.nextLine().strip();
 			        	
 			        	printSongList(ms.getSongByTitle(input));
+			        	
 		        	}
 		        	else {
 		        		System.out.println("This is not an option");
@@ -255,9 +256,20 @@ public class View {
 			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	System.out.println(input);
-			        	
 			        	printSong(library.getSongByTitle(input));
+			        	
+			        	if (ms.getSongByTitle(input) != null) {
+			        		String songTitle = input;
+			        		System.out.println("Get Album Info?");
+				        	System.out.println();
+				        	input = scanner.nextLine().strip();
+				        	
+				        	if (input.toLowerCase().equals("yes")) {
+				        		String albumTitle = ms.getSongByTitle(songTitle).get(0).getAlbum();
+				        		Album a = ms.getAlbumByTitle(albumTitle);
+				        		printAlbum(a);
+				        	}
+			        	}
 		        	}
 		        	else {
 		        		System.out.println("This is not an option");

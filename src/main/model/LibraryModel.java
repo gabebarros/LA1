@@ -44,6 +44,10 @@ public class LibraryModel implements Iterable<Song> {
 		this.recentlyPlayed = new LinkedList<>();
 		this.frequentlyPlayed = new PriorityQueue<>(10, Comparator.comparingInt(Song::getPlayCount).reversed());
 		
+		// add automatic playlists
+		this.playlists.add(new PlayList("Favorite songs"));
+		this.playlists.add(new PlayList("Top Rated"));
+		
 		loadPlayHistory(); // Load play history on startup
 	}
 	
@@ -314,6 +318,33 @@ public class LibraryModel implements Iterable<Song> {
 				Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
 				albums.add(aCopy);
 			}	
+			
+			// check if we need to add to genre playlist
+			String playlistName = (this.getAlbumByTitle(songToAdd.getAlbum()).getGenre() + " Playlist");
+			String genreName = (this.getAlbumByTitle(songToAdd.getAlbum()).getGenre());
+			
+			if (this.getPlayListByName(playlistName) != null) {
+				this.addSongToPlayList(playlistName, songToAdd.getTitle());
+			}
+			else {
+				ArrayList<Song> genreSongs = new ArrayList<Song>();
+				for (Song s : this.songs) {
+					if (this.getAlbumByTitle(s.getAlbum()).getGenre().equals(genreName)){
+						genreSongs.add(s);
+					}
+				}
+				
+				if (genreSongs.size() >= 10) {
+					PlayList genrePL = new PlayList(playlistName);
+					
+					for (Song s : genreSongs) {
+						genrePL.addSong(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
+					}
+					
+					this.playlists.add(genrePL);
+				}
+			}
+			
 		}	
 	}
 	
@@ -520,6 +551,11 @@ public class LibraryModel implements Iterable<Song> {
 		for (Song s : this.songs) {
 			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {
 				s.markFavorite();
+				
+				// add to favorite songs if it isn't already
+				if (!this.getPlayListByName("Favorite Songs").songInPlaylist(s.getTitle())) {
+					this.addSongToPlayList("Favorite Songs", s.getTitle());
+				}
 			}
 		}
 	}
@@ -528,6 +564,21 @@ public class LibraryModel implements Iterable<Song> {
 		for (Song s : this.songs) {
 			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {
 				s.rate(rating);
+				
+				// add to playlists if it isn't already
+				if (rating == 4 || rating == 5) {
+					
+					if (!this.getPlayListByName("Top Rated").songInPlaylist(s.getTitle())) {
+						this.addSongToPlayList("Top Rated", s.getTitle());
+					}
+					
+					if (rating == 5) {
+						
+						if (!this.getPlayListByName("Favorite Songs").songInPlaylist(s.getTitle())) {
+							this.addSongToPlayList("Favorite Songs", s.getTitle());
+						}
+					}
+				}
 				
 			}
 		}

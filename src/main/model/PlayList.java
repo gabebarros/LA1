@@ -72,4 +72,14 @@ public class PlayList {
 	public void shuffle() {
 		Collections.shuffle(songs);
 	}
+	
+	public boolean songInPlaylist(String title) {
+		for (Song s : this.songs) {
+			if (s.getTitle().equals(title)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }

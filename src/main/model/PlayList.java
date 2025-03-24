@@ -10,6 +10,7 @@ package main.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class PlayList {
 	
@@ -38,6 +39,12 @@ public class PlayList {
 			if (s.getRating() != 0) {
 				copySong.rate(s.getRating());
 			}
+			
+			int i = 0;
+			while (i < s.getPlayCount()) {
+				copySong.play();
+				i++;
+			}
 			copy.add(copySong);
 		}
 		
@@ -51,8 +58,32 @@ public class PlayList {
 			if (s.getRating() != 0) {
 				copySong.rate(s.getRating());
 			}
+
+			int i = 0;
+			while (i < s.getPlayCount()) {
+				copySong.play();
+				i++;
+			}
 			
 			this.songs.add(copySong);
+		}
+	}
+	
+	public void insertSong(Song s, int index) {
+		if (!songInPlaylist(s.getTitle())) { // Check if song is already in playlist
+			Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum());
+		
+			if (s.getRating() != 0) {
+				copySong.rate(s.getRating());
+			}
+			
+			int i = 0;
+			while (i < s.getPlayCount()) {
+				copySong.play();
+				i++;
+			}
+			
+			this.songs.add(index, copySong);
 		}
 	}
 	
@@ -63,6 +94,41 @@ public class PlayList {
 				this.songs.remove(cur);
 				break;
 			}
+		}
+	}
+	
+	// removes the first song in the playlist
+	public void removeFirstSong() {
+		if (this.songs.size() > 0) {
+			this.songs.remove(0);
+		}
+	}
+	
+	// removes the last song in the playlist
+	public void removeLastSong() {
+		if (this.songs.size() > 0) {
+			this.songs.remove(this.songs.size()-1);
+		}
+	}
+	
+	public void updateFrequentlyPlayed(Song song) {
+		// play song if song is already in playlist
+		if (this.songInPlaylist(song.getTitle())) {
+			for (Song s : this.songs) {
+				if (s.getTitle().equals(song.getTitle())) {
+					s.play();
+				}
+			}
+		}
+		else {
+			this.addSong(song);
+		}
+		
+		this.songs.sort(Comparator.comparingInt(Song::getPlayCount).reversed()); // Reinsert with updated play count
+		
+		
+		if (this.songs.size() > 10) {
+			this.removeLastSong(); // Keep only the top 10
 		}
 	}
 	

@@ -27,8 +27,6 @@ public class LibraryModel implements Iterable<Song> {
 	
 	private PlayList recentlyPlayed; // Stores the last 10 songs played
 	private PlayList frequentlyPlayed; // Stores the top 10 most played
-	@SuppressWarnings("unused")
-	private MusicStore musicStore; // To retrieve album info if not in the library
 	
 	public LibraryModel() {
 		this.songs = new ArrayList<Song>();
@@ -56,17 +54,20 @@ public class LibraryModel implements Iterable<Song> {
 		song.play(); // Increase play count
 		
 		// Add to Recently Played
-		recentlyPlayed.addSong(song); // Avoid duplicates
+		if (recentlyPlayed.songInPlaylist(song.getTitle())) {
+			recentlyPlayed.removeSong(song);
+			recentlyPlayed.insertSong(song, 0);
+		}
+		else {
+			recentlyPlayed.insertSong(song, 0);
+		}
+		
 		if (recentlyPlayed.getSongs().size() > 10) {
-			recentlyPlayed.getSongs().remove(0); // Keep only the last 10
+			recentlyPlayed.removeLastSong(); // Keep only the first 10
 		}
 		
 		// Add to Frequently Played
-		frequentlyPlayed.addSong(song); // Remove old entry
-		frequentlyPlayed.getSongs().sort(Comparator.comparingInt(Song::getPlayCount).reversed()); // Reinsert with updated play count
-		if (frequentlyPlayed.getSongs().size() > 10) {
-			frequentlyPlayed.getSongs().remove(10); // Keep only the top 10; .poll removes and returns head of queue
-		}
+		frequentlyPlayed.updateFrequentlyPlayed(song);
 	}
 	
 	public PlayList getRecentlyPlayed() {
@@ -120,6 +121,7 @@ public class LibraryModel implements Iterable<Song> {
 					if (s.isFavorite()) {
 						copySong.markFavorite();
 					}
+					
 					copyTracklist.add(copySong);
 				}
 				
@@ -135,11 +137,7 @@ public class LibraryModel implements Iterable<Song> {
 	public Song getSongByTitle(String title) {
 		for (Song s : this.songs) {
 			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {		
-				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
-				if (s.isFavorite()) {
-					copySong.markFavorite();
-				}
-				return copySong;
+				return s;
 			}
 		}
 		
@@ -157,6 +155,7 @@ public class LibraryModel implements Iterable<Song> {
 					if (s.isFavorite()) {
 						copySong.markFavorite();
 					}
+					
 					copyTracklist.add(copySong);
 				}
 				
@@ -182,6 +181,7 @@ public class LibraryModel implements Iterable<Song> {
 				if (s.isFavorite()) {
 					copySong.markFavorite();
 				}
+				
 				searchedSongs.add(copySong);
 			}
 			
@@ -222,6 +222,7 @@ public class LibraryModel implements Iterable<Song> {
 				Album a = ms.getAlbumByTitle(songToAdd.getAlbum());
 				for (Song s : a.getTracklist()) {
 					Song copySongAlbum = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+					
 					copyTracklist.add(copySongAlbum);
 				}
 				
@@ -248,7 +249,9 @@ public class LibraryModel implements Iterable<Song> {
 					PlayList genrePL = new PlayList(playlistName);
 					
 					for (Song s : genreSongs) {
-						genrePL.addSong(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
+						Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+						
+						genrePL.addSong(copySong);
 					}
 					
 					this.playlists.add(genrePL);
@@ -269,6 +272,7 @@ public class LibraryModel implements Iterable<Song> {
 			ArrayList<Song> copyTracklist = new ArrayList<Song>();
 			for (Song s : a.getTracklist()) {
 				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+				
 				copyTracklist.add(copySong);
 				addSong(copySong.getTitle());
 			}
@@ -309,6 +313,7 @@ public class LibraryModel implements Iterable<Song> {
 			if (s.isFavorite()) {
 				copySong.markFavorite();
 			}
+			
 			copyList.add(copySong);
 		}
 		
@@ -325,6 +330,7 @@ public class LibraryModel implements Iterable<Song> {
 				if (s.isFavorite()) {
 					copySong.markFavorite();
 				}
+				
 				copyTracklist.add(copySong);
 			}
 			Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
@@ -369,6 +375,7 @@ public class LibraryModel implements Iterable<Song> {
 				if (s.isFavorite()) {
 					copySong.markFavorite();
 				}
+				
 				copyTracklist.add(copySong);
 			}
 			PlayList pCopy = new PlayList(p.getName(), copyTracklist);
@@ -388,6 +395,7 @@ public class LibraryModel implements Iterable<Song> {
 					if (s.isFavorite()) {
 						copySong.markFavorite();
 					}
+					
 					copyTracklist.add(copySong);
 				}
 				PlayList pCopy = new PlayList(p.getName(), copyTracklist);
@@ -411,6 +419,7 @@ public class LibraryModel implements Iterable<Song> {
 			if (p.getName().toLowerCase().equals(playlist.toLowerCase())) {
 				retval = true;
 				Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating());
+				
 				p.addSong(copySong);
 			}
 		}

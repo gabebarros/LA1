@@ -69,6 +69,7 @@ public class PlayList {
 		}
 	}
 	
+	// inserts a song into a specific index of the playlist
 	public void insertSong(Song s, int index) {
 		if (!songInPlaylist(s.getTitle())) { // Check if song is already in playlist
 			Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum());
@@ -111,6 +112,10 @@ public class PlayList {
 		}
 	}
 	
+	/**
+	 * given a song, calculates the top 10 most frequently played and removes any extra
+	 * only used for the frequently played playlist
+	 */
 	public void updateFrequentlyPlayed(Song song) {
 		// play song if song is already in playlist
 		if (this.songInPlaylist(song.getTitle())) {
@@ -139,6 +144,7 @@ public class PlayList {
 		Collections.shuffle(songs);
 	}
 	
+	// checks if a song is in the playlist. returns true/false
 	public boolean songInPlaylist(String title) {
 		for (Song s : this.songs) {
 			if (s.getTitle().equals(title)) {

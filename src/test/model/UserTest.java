@@ -1,3 +1,8 @@
+/*
+ * Class: MusicStoreTest.java
+ * 
+ * This class contains the unit tests for the User.java class.
+ */
 package test.model;
 
 import static org.junit.jupiter.api.Assertions.*;

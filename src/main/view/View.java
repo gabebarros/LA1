@@ -502,8 +502,14 @@ public class View {
 	        else if (input.equals("shuffle playlist")) {
 	        	System.out.println("Enter the playlist name:");
 	        	String playlistName = scanner.nextLine().strip();
-	        	library.shufflePlayList(playlistName);
-	        	System.out.println("Playlist shuffled!");
+	        	boolean shuffled = library.shufflePlayList(playlistName);
+	        	
+	        	if (shuffled) {
+	        		System.out.println("Playlist shuffled!");
+	        	}
+	        	else {
+	        		System.out.println("Could not find playlist");
+	        	}
 	        }
 	        
 	        // Remove song or album

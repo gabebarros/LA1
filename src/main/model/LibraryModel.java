@@ -584,14 +584,14 @@ public class LibraryModel implements Iterable<Song> {
 	 * Shuffles the songs in a specific playlist.
 	 * @param playlistName The name of the playlist to shuffle.
 	 */
-	public void shufflePlayList(String playlistName) {
+	public boolean shufflePlayList(String playlistName) {
 		for (PlayList p : playlists) {
 			if (p.getName().equalsIgnoreCase(playlistName)) {
 				p.shuffle();
-				return;
+				return true;
 			}
 		}
-		System.out.println("Playlist not found.");
+		return false;
 	}
 
 }

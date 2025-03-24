@@ -42,7 +42,6 @@ public class UserDB {
             writer.close();
         }
         catch (IOException e) {
-        	e.printStackTrace();
         	System.exit(-1);
         }
         
@@ -77,10 +76,8 @@ public class UserDB {
                 }
             }
         } catch (FileNotFoundException e) {
-        	e.printStackTrace();
         	System.exit(-1);
         } catch (IOException e) {
-        	e.printStackTrace();
         	System.exit(-1);
         }
 		
@@ -105,7 +102,6 @@ public class UserDB {
 	        hashedPassword = Base64.getEncoder().encodeToString(hashedBytes);
 		} 
 		catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
 			System.exit(-1);
 		}
 		

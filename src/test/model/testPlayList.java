@@ -78,5 +78,145 @@ class testPlayList {
 		newPlaylist.shuffle();
 
 	}
+	
+	@Test
+	void testInsertSong_NotInPlaylist() {
+		PlayList testPL = new PlayList("Unspecified vibe");
+		
+		Song track1 = new Song("Talk 2 me nice", "Bladee", "Icedancer");
+		Song track2 = new Song("Juna", "Clairo", "Charm");
+		Song track3 = new Song("TRUST", "JPEGMAFIA", "LP");
+		
+		track3.rate(5);
+		
+		testPL.addSong(track1);
+		testPL.insertSong(track3, 0);
+		
+		ArrayList<Song> tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.get(0).getRating() == 5);
+		
+		testPL.insertSong(track2, 0);
+		tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.get(0).getTitle().equals("Juna"));
+	}
+	
+	@Test
+	void testInsertSong_InPlaylist() {
+		PlayList testPL = new PlayList("Unspecified vibe");
+		
+		Song track1 = new Song("Talk 2 me nice", "Bladee", "Icedancer");
+		Song track2 = new Song("Juna", "Clairo", "Charm");
+		Song track3 = new Song("TRUST", "JPEGMAFIA", "LP");
+		
+		testPL.addSong(track1);
+		testPL.addSong(track2);
+		testPL.addSong(track3);
+		testPL.insertSong(track3, 0);
+		
+		ArrayList<Song> tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.size() == 3);
+	}
+	
+	@Test
+	void testRemoveFirstSong_Empty() {
+		PlayList testPL = new PlayList("Unspecified vibe");
+		
+		testPL.removeFirstSong();
+		
+		ArrayList<Song> tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.size() == 0);
+	}
+	
+	@Test
+	void testRemoveFirstSong_NotEmpty() {
+		PlayList testPL = new PlayList("Unspecified vibe");
+		
+		Song track1 = new Song("Talk 2 me nice", "Bladee", "Icedancer");
+		Song track2 = new Song("Juna", "Clairo", "Charm");
+		Song track3 = new Song("TRUST", "JPEGMAFIA", "LP");
+		
+		testPL.addSong(track1);
+		testPL.addSong(track2);
+		testPL.addSong(track3);
+		
+		testPL.removeFirstSong();
+		
+		ArrayList<Song> tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.get(0).getTitle().equals("Juna"));
+	}
+	
+	@Test
+	void testRemoveLastSong_Empty() {
+		PlayList testPL = new PlayList("Unspecified vibe");
+		
+		testPL.removeLastSong();
+		
+		ArrayList<Song> tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.size() == 0);
+	}
+	
+	@Test
+	void testRemoveLastSong_NotEmpty() {
+		PlayList testPL = new PlayList("Unspecified vibe");
+		
+		Song track1 = new Song("Talk 2 me nice", "Bladee", "Icedancer");
+		Song track2 = new Song("Juna", "Clairo", "Charm");
+		Song track3 = new Song("TRUST", "JPEGMAFIA", "LP");
+		
+		testPL.addSong(track1);
+		testPL.addSong(track2);
+		testPL.addSong(track3);
+		
+		testPL.removeLastSong();
+		
+		ArrayList<Song> tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.size() == 2);
+	}
+	
+	@Test
+	void testUpdateFrequentlyPlayed_NotInPlaylist() {
+		PlayList testPL = new PlayList("Unspecified vibe");
+		
+		Song track1 = new Song("Talk 2 me nice", "Bladee", "Icedancer");
+		Song track2 = new Song("Juna", "Clairo", "Charm");
+		Song track3 = new Song("TRUST", "JPEGMAFIA", "LP");
+		
+		testPL.addSong(track1);
+		testPL.addSong(track2);
+		
+		track3.play();
+		testPL.updateFrequentlyPlayed(track3);
+		
+		ArrayList<Song> tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.get(0).getTitle().equals("TRUST"));
+	}
+	
+	@Test
+	void testUpdateFrequentlyPlayed_InPlaylist() {
+		PlayList testPL = new PlayList("Unspecified vibe");
+		
+		Song track1 = new Song("Talk 2 me nice", "Bladee", "Icedancer");
+		Song track2 = new Song("Juna", "Clairo", "Charm");
+		Song track3 = new Song("TRUST", "JPEGMAFIA", "LP");
+		
+		testPL.addSong(track1);
+		testPL.addSong(track2);
+		testPL.addSong(track3);
+		
+		track3.play();
+		testPL.updateFrequentlyPlayed(track3);
+		
+		ArrayList<Song> tracklist = testPL.getSongs();
+		
+		assertTrue(tracklist.get(0).getTitle().equals("TRUST"));
+	}
 
 }

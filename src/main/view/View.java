@@ -199,6 +199,7 @@ public class View {
 			        	input = scanner.nextLine().strip();
 			        	
 			        	printSongList(ms.getSongByTitle(input));
+			        	
 		        	}
 		        	else {
 		        		System.out.println("This is not an option");
@@ -255,9 +256,20 @@ public class View {
 			        	System.out.println();
 			        	input = scanner.nextLine().strip();
 			        	
-			        	System.out.println(input);
-			        	
 			        	printSong(library.getSongByTitle(input));
+			        	
+			        	if (ms.getSongByTitle(input) != null) {
+			        		String songTitle = input;
+			        		System.out.println("Get Album Info?");
+				        	System.out.println();
+				        	input = scanner.nextLine().strip();
+				        	
+				        	if (input.toLowerCase().equals("yes")) {
+				        		String albumTitle = ms.getSongByTitle(songTitle).get(0).getAlbum();
+				        		Album a = ms.getAlbumByTitle(albumTitle);
+				        		printAlbum(a);
+				        	}
+			        	}
 		        	}
 		        	else {
 		        		System.out.println("This is not an option");
@@ -467,22 +479,6 @@ public class View {
 	        	printSongList(library.getSongsByGenre(input));
 	        }
 	        
-	        // Search for a song and request album info
-	        else if (input.equals("search song")) {
-	        	System.out.println("Enter the song title:");
-	        	String title = scanner.nextLine().strip();
-	        	
-	        	Song song = library.getSongByTitle(title);
-	        	printSong(song);
-	        	
-	        	if (song != null) {
-	        		System.out.println("Would you like to see album info? (yes/no)");
-	        		if (scanner.nextLine().strip().equalsIgnoreCase("yes")) {
-	        			library.getAlbumInfoBySong(title);
-	        		}
-	        	}
-	        }
-	        
 	        // Shuffle library or playlist
 	        else if (input.equals("shuffle library")) {
 	        	library.shuffleSongs();
@@ -530,8 +526,10 @@ public class View {
 	        	String ascending = scanner.nextLine().strip();
 	        	if (ascending.equals("A")) {
 	        		library.printSortedSongs(criterion, true);
+	        		System.out.println();
 	        	} else {
 	        		library.printSortedSongs(criterion, false);
+	        		System.out.println();
 	        	}
 	        	
 	        }

@@ -42,6 +42,10 @@ public class LibraryModel implements Iterable<Song> {
 		this.recentlyPlayed = new PlayList("Recently Played");
 		this.frequentlyPlayed = new PlayList("Frequently Played");
 		
+		// add automatic playlists
+		this.playlists.add(new PlayList("Favorite songs"));
+		this.playlists.add(new PlayList("Top Rated"));
+		
 		loadPlayHistory(); // Load play history on startup
 	}
 	
@@ -190,42 +194,7 @@ public class LibraryModel implements Iterable<Song> {
 		
 		return null;
 	}
-	
-	/**
-	 * Retrieves album info for a given song.
-	 * @param songTitle The title of the song.
-	 * @return The album containing the song, or null if the song is not found.
-	 */
-	public Album getAlbumInfoBySong(String songTitle) {
-		Song song = getSongByTitle(songTitle);
-		if (song == null) {
-			System.out.println("Song not found in library.");
-			return null;
-		}
 		
-		String albumTitle = song.getAlbum();
-		Album album = getAlbumByTitle(albumTitle);
-		
-		if (album != null) {
-			System.out.println("Album found in your library:");
-		} else {
-			System.out.println("Album not in your library. Retrieving from Music Store...");
-			album = musicStore.getAlbumByTitle(albumTitle); // Fetch from MusicStore
-		}
-		
-		if (album != null) {
-			System.out.println("Album: " + album.getTitle() + " by " + album.getArtist());
-			System.out.println("Genre: " + album.getGenre() + " | Year: " + album.getYear());
-			System.out.println("Tracklist:");
-			for (Song track : album.getTracklist()) {
-				System.out.println("- " + track.getTitle());
-			}
-		} else {
-			System.out.println("Album information not found.");
-		}
-		return album;
-	}
-	
 	// returns album list by artist if they exist else, returns null
 	public ArrayList<Album> getAlbumsByArtist(String artist){
 		ArrayList<Album> searchedAlbums = new ArrayList<Album>();
@@ -308,6 +277,33 @@ public class LibraryModel implements Iterable<Song> {
 				Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
 				albums.add(aCopy);
 			}	
+			
+			// check if we need to add to genre playlist
+			String playlistName = (this.getAlbumByTitle(songToAdd.getAlbum()).getGenre() + " Playlist");
+			String genreName = (this.getAlbumByTitle(songToAdd.getAlbum()).getGenre());
+			
+			if (this.getPlayListByName(playlistName) != null) {
+				this.addSongToPlayList(playlistName, songToAdd.getTitle());
+			}
+			else {
+				ArrayList<Song> genreSongs = new ArrayList<Song>();
+				for (Song s : this.songs) {
+					if (this.getAlbumByTitle(s.getAlbum()).getGenre().equals(genreName)){
+						genreSongs.add(s);
+					}
+				}
+				
+				if (genreSongs.size() >= 10) {
+					PlayList genrePL = new PlayList(playlistName);
+					
+					for (Song s : genreSongs) {
+						genrePL.addSong(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
+					}
+					
+					this.playlists.add(genrePL);
+				}
+			}
+			
 		}	
 	}
 	
@@ -514,6 +510,11 @@ public class LibraryModel implements Iterable<Song> {
 		for (Song s : this.songs) {
 			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {
 				s.markFavorite();
+				
+				// add to favorite songs if it isn't already
+				if (!this.getPlayListByName("Favorite Songs").songInPlaylist(s.getTitle())) {
+					this.addSongToPlayList("Favorite Songs", s.getTitle());
+				}
 			}
 		}
 	}
@@ -522,6 +523,21 @@ public class LibraryModel implements Iterable<Song> {
 		for (Song s : this.songs) {
 			if (s.getTitle().toLowerCase().equals(title.toLowerCase())) {
 				s.rate(rating);
+				
+				// add to playlists if it isn't already
+				if (rating == 4 || rating == 5) {
+					
+					if (!this.getPlayListByName("Top Rated").songInPlaylist(s.getTitle())) {
+						this.addSongToPlayList("Top Rated", s.getTitle());
+					}
+					
+					if (rating == 5) {
+						
+						if (!this.getPlayListByName("Favorite Songs").songInPlaylist(s.getTitle())) {
+							this.addSongToPlayList("Favorite Songs", s.getTitle());
+						}
+					}
+				}
 				
 			}
 		}

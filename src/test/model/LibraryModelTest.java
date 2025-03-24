@@ -322,7 +322,9 @@ class LibraryModelTest {
 	void testShuffle() {
 		library.shuffleSongs();
 		library.iterator();
+		@SuppressWarnings("unused")
 		PlayList newPlaylist = library.makePlaylist("Test Playlist");
+		@SuppressWarnings("unused")
 		PlayList anotherPlaylist = library.makePlaylist("Cool Playlist");
 		library.shufflePlayList("Test Playlist");
 		library.shufflePlayList("PlayList"); // Playlist not found
@@ -338,5 +340,4 @@ class LibraryModelTest {
 		library.getAlbumInfoBySong("Dupe Song");
 		
 	}
-	
 }

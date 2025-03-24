@@ -543,12 +543,12 @@ public class View {
 	        }
 	        else if (input.equals("list recently played")) {
 	        	System.out.println("Recently Played Songs:");
-	        	printSongList(new ArrayList<>(library.getRecentlyPlayed()));
+	        	printSongList(library.getRecentlyPlayed().getSongs());
 	        }
 	        
 	        else if (input.equals("list frequently played")) {
 	        	System.out.println("Most Frequently Played Songs:");
-	        	printSongList(new ArrayList<>(library.getFrequentlyPlayed()));
+	        	printSongList(library.getFrequentlyPlayed().getSongs());
 	        }
 	        
 	        else {

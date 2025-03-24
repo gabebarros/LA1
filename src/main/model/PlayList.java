@@ -11,8 +11,6 @@ package main.model;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import main.database.MusicStore;
-
 public class PlayList {
 	
 	private String name;

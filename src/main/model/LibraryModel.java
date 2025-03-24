@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 
 import main.database.MusicStore;
 
@@ -32,8 +30,8 @@ public class LibraryModel implements Iterable<Song> {
 	private ArrayList<String> artists;
 	private ArrayList<PlayList> playlists;
 	
-	private LinkedList<Song> recentlyPlayed; // Stores the last 10 songs played
-	private PriorityQueue<Song> frequentlyPlayed; // Stores the top 10 most played
+	private PlayList recentlyPlayed; // Stores the last 10 songs played
+	private PlayList frequentlyPlayed; // Stores the top 10 most played
 	private MusicStore musicStore; // To retrieve album info if not in the library
 	
 	public LibraryModel() {
@@ -41,8 +39,8 @@ public class LibraryModel implements Iterable<Song> {
 		this.albums = new ArrayList<Album>();
 		this.artists = new ArrayList<String>();
 		this.playlists = new ArrayList<PlayList>();
-		this.recentlyPlayed = new LinkedList<>();
-		this.frequentlyPlayed = new PriorityQueue<>(10, Comparator.comparingInt(Song::getPlayCount).reversed());
+		this.recentlyPlayed = new PlayList("Recently Played");
+		this.frequentlyPlayed = new PlayList("Frequently Played");
 		
 		loadPlayHistory(); // Load play history on startup
 	}
@@ -57,35 +55,32 @@ public class LibraryModel implements Iterable<Song> {
 		song.play(); // Increase play count
 		
 		// Add to Recently Played
-		recentlyPlayed.remove(song); // Avoid duplicates
-		recentlyPlayed.addFirst(song);
-		if (recentlyPlayed.size() > 10) {
-			recentlyPlayed.removeLast(); // Keep only the last 10
+		recentlyPlayed.addSong(song); // Avoid duplicates
+		if (recentlyPlayed.getSongs().size() > 10) {
+			recentlyPlayed.getSongs().remove(0); // Keep only the last 10
 		}
 		
 		// Add to Frequently Played
-		frequentlyPlayed.remove(song); // Remove old entry
-		frequentlyPlayed.add(song); // Reinsert with updated play count
-		if (frequentlyPlayed.size() > 10) {
-			frequentlyPlayed.poll(); // Keep only the top 10; .poll removes and returns head of queue
+		frequentlyPlayed.addSong(song); // Remove old entry
+		frequentlyPlayed.getSongs().sort(Comparator.comparingInt(Song::getPlayCount).reversed()); // Reinsert with updated play count
+		if (frequentlyPlayed.getSongs().size() > 10) {
+			frequentlyPlayed.getSongs().remove(10); // Keep only the top 10; .poll removes and returns head of queue
 		}
 	}
 	
-	public List<Song> getRecentlyPlayed() {
-		return new ArrayList<>(recentlyPlayed);
+	public PlayList getRecentlyPlayed() {
+		return recentlyPlayed;
 	}
 	
-	public List<Song> getFrequentlyPlayed() {
-		List<Song> sortedList = new ArrayList<>(frequentlyPlayed);
-		sortedList.sort(Comparator.comparingInt(Song::getPlayCount).reversed());
-		return sortedList;
+	public PlayList getFrequentlyPlayed() {
+		return frequentlyPlayed;
 	}
 	
 	// Save Play History before Exiting
 	public void savePlayHistory() {
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("playHistory.dat"))) {
-			out.writeObject(recentlyPlayed);
-			out.writeObject(new ArrayList<>(frequentlyPlayed)); // Convert PriorityQueue to List before saving
+			out.writeObject(recentlyPlayed.getSongs());
+			out.writeObject(frequentlyPlayed.getSongs()); // Convert PriorityQueue to List before saving
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -95,9 +90,8 @@ public class LibraryModel implements Iterable<Song> {
 	@SuppressWarnings("unchecked")
 	public void loadPlayHistory() {
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("playHistory.dat"))) {
-			recentlyPlayed = ((LinkedList<Song>) in.readObject());
-			frequentlyPlayed = new PriorityQueue<>(10, Comparator.comparingInt(Song::getPlayCount).reversed());
-			frequentlyPlayed.addAll((List<Song>) in.readObject());
+			recentlyPlayed = new PlayList("Recently Played", (ArrayList<Song>) in.readObject());
+			frequentlyPlayed = new PlayList("Frequently Played", (ArrayList<Song>) in.readObject());
 		} catch (IOException | ClassNotFoundException e) {
 			System.out.println("No previous play history found.");
 		}

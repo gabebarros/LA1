@@ -153,7 +153,6 @@ public class View {
 	        	if (db.loginSuccessful(username, password)) {
 	        		currentUser = db.getUser(username);
 	        		library = currentUser.getLibrary();
-	        		library.loadPlayHistory();
 	        		System.out.println("Logged in successfully");
 		        	System.out.println();
 	        	}
@@ -164,11 +163,7 @@ public class View {
 	        	
 	        }
 	        // Logging out
-	        else if (input.equals("log out")) {
-	        	// Before exiting, save play history
-			    library.shutdown();
-				System.out.println("Play History saved.");
-				
+	        else if (input.equals("log out")) {	
 	        	currentUser = null;       // Reset user
 	        	library = genericLibrary; // Reset library
 	        	System.out.println("You are logged out");

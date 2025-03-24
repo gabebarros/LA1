@@ -46,8 +46,9 @@ public class LibraryModel implements Iterable<Song> {
 		// add automatic playlists
 		this.playlists.add(new PlayList("Favorite songs"));
 		this.playlists.add(new PlayList("Top Rated"));
+		this.playlists.add(this.recentlyPlayed);
+		this.playlists.add(this.frequentlyPlayed);
 		
-		loadPlayHistory(); // Load play history on startup
 	}
 	
 	public void playSong(String title) {
@@ -79,32 +80,6 @@ public class LibraryModel implements Iterable<Song> {
 	
 	public PlayList getFrequentlyPlayed() {
 		return frequentlyPlayed;
-	}
-	
-	// Save Play History before Exiting
-	public void savePlayHistory() {
-		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("playHistory.dat"))) {
-			out.writeObject(recentlyPlayed.getSongs());
-			out.writeObject(frequentlyPlayed.getSongs()); // Convert PriorityQueue to List before saving
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	// Load Play History When Application Starts
-	@SuppressWarnings("unchecked")
-	public void loadPlayHistory() {
-		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("playHistory.dat"))) {
-			recentlyPlayed = new PlayList("Recently Played", (ArrayList<Song>) in.readObject());
-			frequentlyPlayed = new PlayList("Frequently Played", (ArrayList<Song>) in.readObject());
-		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("No previous play history found.");
-		}
-	}
-	
-	// Call this when exiting the program to save the history
-	public void shutdown() {
-		savePlayHistory();
 	}
 	
 	/**

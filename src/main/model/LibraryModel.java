@@ -32,6 +32,7 @@ public class LibraryModel implements Iterable<Song> {
 	
 	private PlayList recentlyPlayed; // Stores the last 10 songs played
 	private PlayList frequentlyPlayed; // Stores the top 10 most played
+	@SuppressWarnings("unused")
 	private MusicStore musicStore; // To retrieve album info if not in the library
 	
 	public LibraryModel() {

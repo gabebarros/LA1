@@ -469,7 +469,30 @@ public class LibraryModel implements Iterable<Song> {
 	 * @return True if removed, false if not found.
 	 */
 	public boolean removeSong(String title, String artist) {
-		return songs.removeIf(song -> song.getTitle().equalsIgnoreCase(title) && song.getArtist().equalsIgnoreCase(artist));
+		Song songToRemove = null;
+		for (Song song : songs)  {
+			if (song.getTitle().equalsIgnoreCase(title) && song.getArtist().equalsIgnoreCase(artist)) {
+				songToRemove = song;
+				break;
+			}
+		}
+		
+		if (songToRemove != null) {
+			songs.remove(songToRemove);
+			
+			// Check if the album is now empty
+			for (Song song : songs) {
+				if (song.getAlbum().equalsIgnoreCase(songToRemove.getAlbum())) {
+					return true; // Album still has songs, no need to remove it
+				}
+			}
+			
+			// If no remaining songs are found, remove the album
+			removeAlbum(songToRemove.getAlbum()); // Remove album if it's empty
+			return true;
+		}
+			
+		return false;	
 	}
 	
 	/**
@@ -479,7 +502,20 @@ public class LibraryModel implements Iterable<Song> {
 	 * @param title
 	 */
 	public boolean removeAlbum(String title) {
-		return albums.removeIf(album -> album.getTitle().equalsIgnoreCase(title));
+		Album albumToRemove = null;
+		for (Album album : albums) {
+			if (album.getTitle().equalsIgnoreCase(title)) {
+				albumToRemove = album;
+				break;
+			}
+		}
+		
+		if (albumToRemove != null) {
+			albums.remove(albumToRemove);
+			songs.removeIf(song -> song.getAlbum().equalsIgnoreCase(title));
+			return true;
+		}
+		return false;
 	}
 	
 	public void markAsFavorite(String title) {

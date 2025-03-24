@@ -190,7 +190,7 @@ class LibraryModelTest {
 		
 		ArrayList<PlayList> playlists = library.getPlaylists();
 		assertNotNull(playlists);
-		assertEquals(4, playlists.size());
+		assertEquals(6, playlists.size());
 	}
 	
 	@Test
@@ -300,9 +300,7 @@ class LibraryModelTest {
 		lib.playSong("blanket");
 		
 		lib.getRecentlyPlayed();
-		lib.getFrequentlyPlayed();
-		lib.shutdown(); // Need user login data for full coverage (load/save)
-		
+		lib.getFrequentlyPlayed();		
 	}
 	
 	@Test

@@ -45,13 +45,15 @@ public class PlayList {
 	}
 	
 	public void addSong(Song s) {
-		Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum());
+		if (!songInPlaylist(s.getTitle())) { // Check if song is already in playlist
+			Song copySong = new Song(s.getTitle(), s.getArtist(), s.getAlbum());
 		
-		if (s.getRating() != 0) {
-			copySong.rate(s.getRating());
-		}
+			if (s.getRating() != 0) {
+				copySong.rate(s.getRating());
+			}
 			
-		this.songs.add(copySong);
+			this.songs.add(copySong);
+		}
 	}
 	
 	// only removes 1 song if there are multiple copies

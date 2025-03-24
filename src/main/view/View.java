@@ -12,6 +12,7 @@ package main.view;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import main.database.MusicStore;
@@ -111,6 +112,7 @@ public class View {
 	        if (input.equals("quit")) {
 	        	break;
 	        }
+	        
 	        // Create a User
 	        else if (input.equals("create user")) {
 	        	System.out.println("What is your username?");
@@ -138,6 +140,7 @@ public class View {
 				}
 	        	
 	        }
+	        
 	        // Logging in
 	        else if (input.equals("login")) {
 	        	System.out.println("What is your username?");
@@ -162,6 +165,7 @@ public class View {
 	        	}
 	        	
 	        }
+	        
 	        // Logging out
 	        else if (input.equals("log out")) {	
 	        	currentUser = null;       // Reset user
@@ -169,6 +173,7 @@ public class View {
 	        	System.out.println("You are logged out");
 	        	System.out.println();
 	        }
+	        
 	        // Searching MusicStore
 	        else if (input.equals("search music store")) {
 	        	System.out.println("Do you want to search for song(s) or album(s)?");
@@ -227,6 +232,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
+	        
 	        // Searching library
 	        else if (input.equals("search library")) {
 	        	System.out.println("What do you want to search for?");
@@ -317,6 +323,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
+	        
 	        // Add Song to library
 	        else if (input.equals("add song")) {
 	        	System.out.println("Which song?");
@@ -326,6 +333,7 @@ public class View {
 	        	
 	        	library.addSong(input);
 	        }
+	        
 	        // Add Album to library
 	        else if (input.equals("add album")) {
 	        	System.out.println("Which album?");
@@ -336,10 +344,12 @@ public class View {
 	        	library.addAlbum(input);
 	        	System.out.println(input + " added.");
 	        }
+	        
 	        // List added songs
 	        else if (input.equals("list my songs")) {
 	        	printSongList(library.getSongs());
 	        }
+	        
 	        // List added artists
 	        else if (input.equals("list my artists")) {
 	        	ArrayList<String> artists = library.getArtists();
@@ -354,10 +364,12 @@ public class View {
 	        		}
 	        	}
 	        }
+	        
 	        // List added Albums
 	        else if (input.equals("list my albums")) {
 	        	printAlbumList(library.getAlbums());
 	        }
+	        
 	        // List created playlists
 	        else if (input.equals("list my playlists")) {
 	        	ArrayList<PlayList> playlists = library.getPlaylists();
@@ -367,10 +379,12 @@ public class View {
 	        	}
 	        	System.out.println();
 	        }
+	        
 	        // List favorite songs
 	        else if (input.equals("list my favorite songs")) {
 	        	printSongList(library.getFavorites());
 	        }
+	        
 	        // Create a playlist
 	        else if (input.equals("create playlist")) {
 	        	System.out.println("What do you want to name your playlist?");
@@ -383,6 +397,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
+	        
 	        // Add song to playlist
 	        else if (input.equals("add song to playlist")) {
 	        	System.out.println("Which playlist?");
@@ -400,6 +415,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
+	        
 	        // Remove song from playlist
 	        else if (input.equals("remove song from playlist")) {
 	        	System.out.println("Which playlist?");
@@ -417,6 +433,7 @@ public class View {
 	        		System.out.println();
 	        	}
 	        }
+	        
 	        // Mark as Favorite
 	        else if (input.equals("mark song as favorite")) {
 	        	System.out.println("Which song?");
@@ -429,12 +446,13 @@ public class View {
 	        	if (s == null) {
 	        		System.out.println("No song with this title");
 	        		System.out.println();
-	        	}
+	        	} 
 	        	else {
 	        		library.markAsFavorite(s.getTitle());
 	        	}
 	        	
 	        }
+	        
 	        // Rate a song
 	        else if (input.equals("rate a song")) {
 	        	System.out.println("Which song?");
@@ -448,6 +466,7 @@ public class View {
 	        		System.out.println("No song with this title");
 	        		System.out.println();
 	        	}
+	        	
 	        	else {
 		        	System.out.println("What is the rating?");
 		        	System.out.println();
@@ -462,8 +481,8 @@ public class View {
 			        	System.out.println();
 		        	}
 	        	}
-	        	
 	        }
+	        
 	        // List songs by genre
 	        else if (input.equals("list songs by genre")) {
 	        	System.out.println("Which genre?");
@@ -518,16 +537,18 @@ public class View {
 	        	System.out.println("What will you sort by? (title/artist/rating)");
 	        	String criterion = scanner.nextLine().strip();
 	        	System.out.println("Ascending or Descending? (A/D)");
-	        	String ascending = scanner.nextLine().strip();
-	        	if (ascending.equals("A")) {
-	        		library.printSortedSongs(criterion, true);
-	        		System.out.println();
-	        	} else {
-	        		library.printSortedSongs(criterion, false);
-	        		System.out.println();
+	        	String order = scanner.nextLine().strip();
+	        	
+	        	boolean ascending = order.equalsIgnoreCase("A");
+	        	List<Song> sortedSongs = library.getSortedSongs(criterion, ascending);
+	        	
+	        	System.out.println("Sorted Songs:");
+	        	for (Song song : sortedSongs) {
+	        		System.out.println(song.getTitle() + " by " + song.getArtist());
 	        	}
 	        	
 	        }
+	        
 	        // Show Recently and Frequently Played Songs
 	        else if (input.equals("play song")) {
 	        	System.out.println("Which song?");

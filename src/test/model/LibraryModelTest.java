@@ -305,9 +305,9 @@ class LibraryModelTest {
 	
 	@Test
 	void testSortingSongs() {
-		library.printSortedSongs("title", true);
-		library.printSortedSongs("artist", false);
-		library.printSortedSongs("rating", true);
+		library.getSortedSongs("title", true);
+		library.getSortedSongs("artist", false);
+		library.getSortedSongs("rating", true);
 	}
 	
 	@Test

@@ -10,11 +10,6 @@
  */
 package main.model;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -113,26 +108,6 @@ public class LibraryModel implements Iterable<Song> {
 		
 		sortedSongs.sort(comparator);
 		return sortedSongs;
-	}
-	
-	// prints list of songs by sorting criterion
-	public void printSortedSongs(String criterion, boolean ascending) {
-		String order = ascending ? "Ascending" : "Descending";
-		
-		// Format the criterion to match capitalization 
-		String formattedCriterion = switch (criterion.toLowerCase()) {
-			case "title" -> "Title";
-			case "artist" -> "Artist";
-			case "rating" -> "Rating";
-			default -> throw new IllegalArgumentException("Invalid sorting criterion.");
-		};
-		
-		System.out.println("Sorted by " + formattedCriterion + " (" + order + "):");
-		
-		List<Song> sortedSongs = getSortedSongs(criterion, ascending);
-		for (Song song : sortedSongs) {
-			System.out.println(song.getTitle());
-		}
 	}
 	
 	// returns album with title 'title' if it exists, else returns null

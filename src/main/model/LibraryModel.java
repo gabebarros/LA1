@@ -221,10 +221,7 @@ public class LibraryModel implements Iterable<Song> {
 				ArrayList<Song> copyTracklist = new ArrayList<Song>();
 				Album a = ms.getAlbumByTitle(songToAdd.getAlbum());
 				for (Song s : a.getTracklist()) {
-					
-					if (s.getTitle().equals(songToAdd.getTitle())) {
-						copyTracklist.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
-					}
+					copyTracklist.add(new Song(s.getTitle(), s.getArtist(), s.getAlbum(), s.getRating()));
 				}
 				
 				Album aCopy = new Album(a.getTitle(), a.getArtist(), a.getGenre(), a.getYear(), copyTracklist);
